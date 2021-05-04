@@ -1,5 +1,6 @@
 using DearCoder.Data;
 using DearCoder.Models;
+using DearCoder.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -42,6 +43,7 @@ namespace DearCoder
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            services.AddScoped<IFileService, BasicFileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

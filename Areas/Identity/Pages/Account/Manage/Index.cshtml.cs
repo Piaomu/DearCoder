@@ -33,6 +33,11 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+
+            [Display(Name = "Display Name")]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
+            public string DisplayName { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
@@ -47,6 +52,7 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                DisplayName = user.DisplayName,
                 PhoneNumber = phoneNumber
             };
         }
@@ -86,6 +92,14 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            //Store the new displayName if it has changed
+            if(user.DisplayName != Input.DisplayName)
+            {
+                //Store the new name
+                user.DisplayName = Input.DisplayName;
+                await _userManager.UpdateAsync(user);
             }
 
             await _signInManager.RefreshSignInAsync(user);

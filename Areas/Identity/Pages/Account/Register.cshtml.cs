@@ -14,6 +14,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using DearCoder.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace DearCoder.Areas.Identity.Pages.Account
 {
@@ -24,17 +28,21 @@ namespace DearCoder.Areas.Identity.Pages.Account
         private readonly UserManager<BlogUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IFileService _fileService;
+        private readonly IConfiguration _configuration;
 
         public RegisterModel(
             UserManager<BlogUser> userManager,
             SignInManager<BlogUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IFileService fileService, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _fileService = fileService;
+            _configuration = configuration;
         }
 
         [BindProperty]
@@ -46,6 +54,9 @@ namespace DearCoder.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Display(Name = "Custom Image")]
+            public IFormFile ImageFile { get; set; }
+
             [Required]
             [Display(Name = "Given Name")]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
@@ -95,7 +106,14 @@ namespace DearCoder.Areas.Identity.Pages.Account
                     SurName = Input.SurName,
                     DisplayName = Input.DisplayName,
                     UserName = Input.Email, 
-                    Email = Input.Email 
+                    Email = Input.Email,
+                    
+                    ImageData = (await _fileService.EncodeFileAsync(Input.ImageFile)) ??
+                                await _fileService.EncodeFileAsync(_configuration["defaultUserImage"]),
+
+                    ContentType = Input.ImageFile is null ?
+                            Path.GetExtension(_configuration["defaultUserImage"]) :
+                            _fileService.ContentType(Input.ImageFile)
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
