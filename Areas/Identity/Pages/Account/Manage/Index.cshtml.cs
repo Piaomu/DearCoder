@@ -4,9 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using DearCoder.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using DearCoder.Services;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace DearCoder.Areas.Identity.Pages.Account.Manage
 {
@@ -14,16 +18,21 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<BlogUser> _userManager;
         private readonly SignInManager<BlogUser> _signInManager;
-
+        private readonly IFileService _fileService;
+        private readonly IConfiguration _configuration;
         public IndexModel(
             UserManager<BlogUser> userManager,
-            SignInManager<BlogUser> signInManager)
+            SignInManager<BlogUser> signInManager, IFileService fileService, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _fileService = fileService;
+            _configuration = configuration;
         }
 
         public string Username { get; set; }
+
+        public string CurrentImage { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -33,6 +42,21 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [Display(Name = "Custom Image")]
+            public IFormFile ImageFile { get; set; }
+
+            //public byte[] ProfilePic { get; set; }
+            //public string ContentType { get; set; }
+            
+            [Required]
+            [Display(Name = "Given Name")]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
+            public string GivenName { get; set; }
+
+            [Required]
+            [Display(Name = "Surname")]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
+            public string SurName { get; set; }
 
             [Display(Name = "Display Name")]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
@@ -49,11 +73,18 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            CurrentImage = _fileService.DecodeImage(user.ImageData, user.ContentType);
 
             Input = new InputModel
             {
                 DisplayName = user.DisplayName,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                GivenName = user.GivenName,
+                SurName = user.SurName,
+                //ProfilePic = user.ImageData,
+                //ContentType = user.ContentType,
+
+
             };
         }
 
@@ -79,6 +110,7 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
 
             if (!ModelState.IsValid)
             {
+
                 await LoadAsync(user);
                 return Page();
             }
@@ -94,11 +126,31 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+
+            if (Input.GivenName != user.GivenName)
+            {
+                user.GivenName = Input.GivenName;
+                await _userManager.UpdateAsync(user);
+            }
+
+            if (Input.SurName != user.SurName)
+            {
+                user.SurName = Input.SurName;
+                await _userManager.UpdateAsync(user);
+            }
+
             //Store the new displayName if it has changed
             if(user.DisplayName != Input.DisplayName)
             {
                 //Store the new name
                 user.DisplayName = Input.DisplayName;
+                await _userManager.UpdateAsync(user);
+            }
+
+            if (Input.ImageFile is not null)
+            {
+                user.ImageData = await _fileService.EncodeFileAsync(Input.ImageFile);
+                user.ContentType = _fileService.ContentType(Input.ImageFile);
                 await _userManager.UpdateAsync(user);
             }
 
