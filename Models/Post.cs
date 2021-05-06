@@ -1,7 +1,9 @@
 ﻿using DearCoder.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,6 +37,12 @@ namespace DearCoder.Models
         [Display(Name = "Publish State")]
         public PublishState PublishState { get; set; }
 
+        public byte[] ImageData { get; set; }
+        public string ContentType { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Add Post Image")]
+        public IFormFile ImageFile { get; set; }
         //Navigational properties
         public virtual Blog Blog { get; set; }
     }

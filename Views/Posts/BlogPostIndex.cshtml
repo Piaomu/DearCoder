@@ -1,8 +1,8 @@
 ﻿@using DearCoder.Services
-@model IEnumerable<Blog>
+@model IEnumerable<Post>
 @inject IFileService _fileService
 
-@{ 
+@{
     ViewData["Title"] = "Landing Page";
 }
 <!--Copy body of template landing page here-->
@@ -10,26 +10,26 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-            @foreach (var blog in Model)
+            @foreach (var post in Model)
             {
                 <div class="post-preview row">
                     <div class="col">
                         <a href="post.html">
-                            <h2 class="post-title">@blog.Name</h2>
-                            <h3 class="post-subtitle">@blog.Description</h3>
+                            <h2 class="post-title">@post.Title</h2>
+                            <h3 class="post-subtitle">@post.Abstract</h3>
                         </a>
                         <p class="post-meta">
                             posted by
                             <a href="#!">Kasey Wahl</a>
-                            on @blog.Created.ToString("MMM, dd, yyyy")
+                            on @post.Created.ToString("MMM, dd, yyyy")
                         </p>
                     </div>
                     <div class="col">
-                        <img id="BlogImage" class="img-fluid" src=" @_fileService.DecodeImage(blog.Image, blog.ContentType)" />
+                        <img id="BlogImage" class="img-fluid" src=" @_fileService.DecodeImage(post.ImageData, post.ContentType)" />
                     </div>
                     <div class="row">
                         <div class="col">
-                            <a class="btn btn-dark btn-sm" asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id">Read Posts</a>
+                            <a class="btn btn-dark btn-sm" asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id">Read Full Post</a>
                         </div>
                     </div>
                 </div>
@@ -44,3 +44,4 @@
     </div>
 </div>
 <hr />
+

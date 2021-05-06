@@ -7,17 +7,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DearCoder.Data;
 using DearCoder.Models;
+using DearCoder.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace DearCoder.Controllers
 {
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFileService _fileService;
+        private readonly IConfiguration _configuration;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration)
         {
             _context = context;
+            _fileService = fileService;
+            _configuration = configuration;
         }
+
+        public async Task<ActionResult> BlogPostIndex(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var blogPosts = await _context.Posts.Where(p => p.BlogId == id).ToListAsync();
+            return View("Index", blogPosts);
+        }
+
 
         // GET: Posts
         public async Task<IActionResult> Index()
@@ -57,13 +75,22 @@ namespace DearCoder.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BlogId,Title,Abstract,Content,Created,Updated,Slug,PublishState")] Post post)
+        public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,PublishState,ImageFile")] Post post)
         {
             if (ModelState.IsValid)
             {
+                post.Created = DateTime.Now;
+
+                post.ImageData = (await _fileService.EncodeFileAsync(post.ImageFile)) ??
+                                  await _fileService.EncodeFileAsync(_configuration["DefaultPostImage"]);
+                //Add your default image to the img folder!!!
+                post.ContentType = post.ImageFile is null ?
+                                    _configuration["DefaultPostImage"].Split('.')[1] :
+                                    _fileService.ContentType(post.ImageFile);
+
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("BlogPostIndex", new { id = post.BlogId });
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             return View(post);

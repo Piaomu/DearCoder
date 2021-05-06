@@ -9,6 +9,7 @@ using DearCoder.Data;
 using DearCoder.Models;
 using DearCoder.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace DearCoder.Controllers
 {
@@ -16,13 +17,14 @@ namespace DearCoder.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
+        private readonly IConfiguration _configuration;
 
-
-        //Hey Jason, what is the terminology to describe the text below again?
-        public BlogsController(ApplicationDbContext context, IFileService fileService)
+        //constructor injection
+        public BlogsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration)
         {
             _context = context;
             _fileService = fileService;
+            _configuration = configuration;
         }
 
         // GET: Blogs
@@ -60,16 +62,23 @@ namespace DearCoder.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Created,Updated")] Blog blog, IFormFile Image)
+        public async Task<IActionResult> Create([Bind("Name,Description")] Blog blog, IFormFile Image)
         {
             if (ModelState.IsValid)
             {
-                blog.Image = await _fileService.EncodeFileAsync(Image);
-                blog.ContentType = _fileService.ContentType(Image);
+                blog.Image = (await _fileService.EncodeFileAsync(Image)) ??
+                              await _fileService.EncodeFileAsync(_configuration["DefaultBlogImage"]);
+
+                blog.ContentType = blog.Image is null ?
+                                    _configuration["DefaultBlogImage"].Split('.')[1] :
+                                    _fileService.ContentType(Image);
+
+                blog.Created = DateTime.Now;
+               
 
                 _context.Add(blog);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(blog);
         }
@@ -106,7 +115,10 @@ namespace DearCoder.Controllers
             {
                 try
                 {
-                    if(NewImage is not null)
+                    blog.Created = blog.Created;
+                    blog.Updated = DateTime.Now;
+
+                    if (NewImage is not null)
                     {
                         blog.ContentType = _fileService.ContentType(NewImage);
                         blog.Image = await _fileService.EncodeFileAsync(NewImage);
