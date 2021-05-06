@@ -26,7 +26,7 @@ namespace DearCoder.Controllers
             //Load the view with all blog data
             var allBlogs = await _context.Blogs.ToListAsync();
 
-            return View();
+            return View(allBlogs);
         }
 
         public IActionResult Privacy()

@@ -26,6 +26,9 @@ namespace DearCoder.Models
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
 
+        public byte[] Image { get; set; }
+        public string ContentType { get; set; }
+
         //Navigational properties
         public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
     }

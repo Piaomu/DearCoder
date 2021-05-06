@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<Blog>
+@using DearCoder.Services
+@inject IFileService _fileService
 
 <!--Copy body of template landing page here-->
 <!-- main content-->
@@ -12,6 +14,9 @@
                         <h2 class="post-title">@blog.Name</h2>
                         <h3 class="post-subtitle">@blog.Description</h3>
                     </a>
+                    <div>
+                        <img id="BlogImage" class="img-fluid" src =" @_fileService.DecodeImage(blog.Image, blog.ContentType)"/>
+                    </div>
                     <p class="post-meta">
                         posted by Kasey Wahl
                         <a href="#!">start bootstrap</a>

@@ -7,16 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DearCoder.Data;
 using DearCoder.Models;
+using DearCoder.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace DearCoder.Controllers
 {
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFileService _fileService;
 
-        public BlogsController(ApplicationDbContext context)
+
+        //Hey Jason, what is the terminology to describe the text below again?
+        public BlogsController(ApplicationDbContext context, IFileService fileService)
         {
             _context = context;
+            _fileService = fileService;
         }
 
         // GET: Blogs
@@ -54,10 +60,13 @@ namespace DearCoder.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Created,Updated")] Blog blog)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Created,Updated")] Blog blog, IFormFile Image)
         {
             if (ModelState.IsValid)
             {
+                blog.Image = await _fileService.EncodeFileAsync(Image);
+                blog.ContentType = _fileService.ContentType(Image);
+
                 _context.Add(blog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +95,7 @@ namespace DearCoder.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Created,Updated")] Blog blog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Created,Updated,Image,ContentType")] Blog blog, IFormFile NewImage)
         {
             if (id != blog.Id)
             {
@@ -97,6 +106,12 @@ namespace DearCoder.Controllers
             {
                 try
                 {
+                    if(NewImage is not null)
+                    {
+                        blog.ContentType = _fileService.ContentType(NewImage);
+                        blog.Image = await _fileService.EncodeFileAsync(NewImage);
+                    }
+
                     _context.Update(blog);
                     await _context.SaveChangesAsync();
                 }
