@@ -100,19 +100,21 @@ namespace DearCoder.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new BlogUser 
-                { 
+
+
+                var user = new BlogUser
+                {
                     GivenName = Input.GivenName,
                     SurName = Input.SurName,
                     DisplayName = Input.DisplayName,
-                    UserName = Input.Email, 
+                    UserName = Input.Email,
                     Email = Input.Email,
-                    
+
                     ImageData = (await _fileService.EncodeFileAsync(Input.ImageFile)) ??
                                 await _fileService.EncodeFileAsync(_configuration["defaultUserImage"]),
 
                     ContentType = Input.ImageFile is null ?
-                            Path.GetExtension(_configuration["defaultUserImage"]) :
+                            _configuration["defaultUserImage"].Split('.')[1] :
                             _fileService.ContentType(Input.ImageFile)
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
