@@ -10,6 +10,7 @@ using DearCoder.Models;
 using DearCoder.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DearCoder.Controllers
 {
@@ -52,6 +53,7 @@ namespace DearCoder.Controllers
         }
 
         // GET: Blogs/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return View();

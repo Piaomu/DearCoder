@@ -33,7 +33,7 @@ namespace DearCoder.Controllers
             }
 
             var blogPosts = await _context.Posts.Where(p => p.BlogId == id).ToListAsync();
-            return View("Index", blogPosts);
+            return View(blogPosts);
         }
 
 
@@ -66,7 +66,7 @@ namespace DearCoder.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description");
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
             return View();
         }
 

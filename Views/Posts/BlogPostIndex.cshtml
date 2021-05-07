@@ -23,14 +23,15 @@
                             <a href="#!">Kasey Wahl</a>
                             on @post.Created.ToString("MMM, dd, yyyy")
                         </p>
+                        <div class="col">
+                            <a class="btn btn-dark btn-sm btn-block" asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id">Read Full Post</a>
+                        </div>
                     </div>
                     <div class="col">
                         <img id="BlogImage" class="img-fluid" src=" @_fileService.DecodeImage(post.ImageData, post.ContentType)" />
                     </div>
                     <div class="row">
-                        <div class="col">
-                            <a class="btn btn-dark btn-sm" asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id">Read Full Post</a>
-                        </div>
+
                     </div>
                 </div>
                 <hr />
