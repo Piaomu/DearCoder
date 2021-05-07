@@ -19,10 +19,13 @@
                     <h1 class="fw-bolder mb-1">@Html.Raw(Model.Title)</h1>
                     <h4 class="fw-bolder mt-3">@Html.Raw(Model.Abstract)</h4>
                     <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-2">Posted on @Html.DisplayFor(model => model.Created) by Kasey Wahl</div>
+                    <div class="text-muted fst-italic mb-2">Posted on @Html.DisplayFor(model => model.Created) by <a href="https://kaseywahl.io/about.html">Kasey Wahl</a></div>
                     <!-- Post categories-->
-                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
-                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
+                    
+                   
+                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Development</a>
+                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Tutorial</a>
+                    
                 </header>
                 <!-- Preview image figure-->
                 <figure class="mb-4"><img class="img-fluid rounded" src=" @_fileService.DecodeImage(Model.ImageData, Model.ContentType)" alt="..." /></figure>
