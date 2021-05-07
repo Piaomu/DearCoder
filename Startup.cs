@@ -44,6 +44,7 @@ namespace DearCoder
             services.AddRazorPages();
 
             services.AddScoped<IFileService, BasicFileService>();
+            services.AddScoped<DataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
