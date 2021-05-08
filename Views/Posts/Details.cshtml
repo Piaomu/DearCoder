@@ -19,13 +19,22 @@
                     <h1 class="fw-bolder mb-1">@Html.Raw(Model.Title)</h1>
                     <h4 class="fw-bolder mt-3">@Html.Raw(Model.Abstract)</h4>
                     <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-2">Posted on @Html.DisplayFor(model => model.Created) by <a href="https://kaseywahl.io/about.html">Kasey Wahl</a></div>
-                    <!-- Post categories-->
-                    
+                    <div class="text-muted fst-italic mb-2">
+                        Posted on @Html.DisplayFor(model => model.Created) by <a href="https://kaseywahl.io/about.html">Kasey Wahl</a>
+                        <!--Admin Options-->
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <a class="badge bg-info text-decoration-none link-light" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                            <a class="badge bg-info text-decoration-none link-light" asp-action="Create" asp-route-id="@Model.Id">Create New</a>
+                        }
+                    </div>
                    
+
+                    <!-- Post categories-->
+                    <!--Loop over BlogIds and create links to the categories?-->
                     <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Development</a>
                     <a class="badge bg-secondary text-decoration-none link-light" href="#!">Tutorial</a>
-                    
+
                 </header>
                 <!-- Preview image figure-->
                 <figure class="mb-4"><img class="img-fluid rounded" src=" @_fileService.DecodeImage(Model.ImageData, Model.ContentType)" alt="..." /></figure>
@@ -121,6 +130,6 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+ |
     <a asp-action="BlogPostIndex">Back to List</a>
 </div>
