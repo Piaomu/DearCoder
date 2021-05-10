@@ -41,6 +41,8 @@ namespace DearCoder.Controllers
         // GET: Posts
         public async Task<IActionResult> Index()
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
             var applicationDbContext = _context.Posts.Include(p => p.Blog);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -55,6 +57,8 @@ namespace DearCoder.Controllers
 
             var post = await _context.Posts
                 .Include(p => p.Blog)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (post == null)
             {
@@ -90,7 +94,7 @@ namespace DearCoder.Controllers
 
                 post.ImageData = (await _fileService.EncodeFileAsync(post.ImageFile)) ??
                                   await _fileService.EncodeFileAsync(_configuration["DefaultPostImage"]);
-                //Add your default image to the img folder!!!
+
                 post.ContentType = post.ImageFile is null ?
                                     _configuration["DefaultPostImage"].Split('.')[1] :
                                     _fileService.ContentType(post.ImageFile);
@@ -125,7 +129,7 @@ namespace DearCoder.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,Created,Updated,Slug,PublishState")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("BlogId,Title,Abstract,Content,PublishState,ImageFile")] Post post)
         {
             if (id != post.Id)
             {
@@ -136,6 +140,13 @@ namespace DearCoder.Controllers
             {
                 try
                 {
+                    post.ImageData = (await _fileService.EncodeFileAsync(post.ImageFile)) ??
+                             await _fileService.EncodeFileAsync(_configuration["DefaultPostImage"]);
+
+                    post.ContentType = post.ImageFile is null ?
+                                        _configuration["DefaultPostImage"].Split('.')[1] :
+                                        _fileService.ContentType(post.ImageFile);
+
                     _context.Update(post);
                     await _context.SaveChangesAsync();
                 }

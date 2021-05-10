@@ -10,7 +10,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-            @foreach (var post in Model)
+            @foreach (var post in Model.OrderByDescending(c => c.Created))
             {
                 <div class="post-preview row">
                     <div class="col">

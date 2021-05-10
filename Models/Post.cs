@@ -12,13 +12,16 @@ namespace DearCoder.Models
     public class Post
     {
         public int Id { get; set; }
+       
+        [Display(Name = "Category")]
         public int BlogId { get; set; }
-        
+
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
         public string Title { get; set; }
 
+        [Display(Name = "Subheading")]
         [StringLength(200, ErrorMessage = "The {0} must be at least {2} and at most {1} characters.", MinimumLength = 2)]
         public string Abstract { get; set; }
 
@@ -45,5 +48,6 @@ namespace DearCoder.Models
         public IFormFile ImageFile { get; set; }
         //Navigational properties
         public virtual Blog Blog { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
     }
 }

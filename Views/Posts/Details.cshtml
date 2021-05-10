@@ -26,14 +26,9 @@
                         {
                             <a class="badge bg-info text-decoration-none link-light" asp-action="Edit" asp-route-id="@Model.Post.Id">Edit</a>
                             <a class="badge bg-info text-decoration-none link-light" asp-action="Create" asp-route-id="@Model.Post.Id">Create New</a>
-                            <a class="badge bg-info text-decoration-none link-light" asp-action="Index">See All</a>
+                            <a class="badge bg-info text-decoration-none link-light" asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@Model.Post.Id">See All</a>
                         }
                     </div>
-
-
-                    <!-- Post categories-->
-                    <!--Loop over BlogIds and create links to the categories?-->
-
 
 
                 </header>
@@ -44,48 +39,42 @@
                     <div>@Html.Raw(Model.Post.Content)</div>
                 </section>
             </article>
-            <!-- Comments section-->
-            <section class="mb-5">
-                <div class="card bg-light">
-                    <div class="card-body">
-                        <!-- Comment form-->
-                        <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
-                        <!-- Comment with nested comments-->
-                        <div class="d-flex mb-4">
-                            <!-- Parent comment-->
-                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                            <div class="ms-3">
-                                <div class="fw-bold">Commenter Name</div>
-                                If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                                <!-- Child comment 1-->
-                                <div class="d-flex mt-4">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
-                                    </div>
-                                </div>
-                                <!-- Child comment 2-->
-                                <div class="d-flex mt-4">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        When you put money directly to a problem, it makes a good headline.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Single comment-->
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                            <div class="ms-3">
-                                <div class="fw-bold">Commenter Name</div>
-                                When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
-                            </div>
-                        </div>
-                    </div>
+            <hr />
+
+            @*Count of total comments*@
+            <div class="btn-sm btn-dark btn-block">@Model.Post.Comments.Count Comment(s)</div>
+            @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
+            {
+        <div class="d-flex mb-4">
+            <!-- Parent comment-->
+            <div class="flex-shrink-0 media p-3"><img class="rounded-circle img-fluid" style="width:60px;" src="@_fileService.DecodeImage(comment.Author.ImageData, comment.Author.ContentType)" alt="@comment.Author.FullName" /></div>
+            <div class="ms-3">
+                <div class="fw-bold">
+                    <h4>@comment.Author.FullName</h4> <small>posted on @comment.Created.ToString("MMM dd, yyyy")</small>
                 </div>
-            </section>
+                <div>
+                    <p>@comment.Body</p>
+                </div>
+            </div>
+            <hr />
+        </div>
+            }
+
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a class="btn btn-dark btn-block btn-sm" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details","Posts", new {id = Model.Post.Id})">Login to add a comment</a>
+            }
+            else
+            {
+
+                //Now that you're logged in, I want to present you with a form to add a new comment.
+                <form asp-action="Create" asp-controller="Comments" method="post">
+                    <input type="hidden" name="PostId" value="@Model.Post.Id" />
+                    <textarea class="form-control" name="Body" rows="3" placeholder="Add a comment..."></textarea>
+                    <button class="btn btn-dark btn-block btn-small" type="submit">Add Comment</button>
+
+                </form>
+            }
         </div>
         <!-- Side widgets-->
         <div class="col-lg-4">
