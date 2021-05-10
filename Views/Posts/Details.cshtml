@@ -1,5 +1,5 @@
 ﻿@using DearCoder.Services
-@model DearCoder.Models.Post
+@model DearCoder.ViewModels.PostDetailsViewModel
 @inject IFileService _fileService 
 
 @{
@@ -16,32 +16,32 @@
                 <!-- Post header-->
                 <header class="mb-4">
                     <!-- Post title-->
-                    <h1 class="fw-bolder mb-1">@Html.Raw(Model.Title)</h1>
-                    <h4 class="fw-bolder mt-3">@Html.Raw(Model.Abstract)</h4>
+                    <h1 class="fw-bolder mb-1">@Html.Raw(Model.Post.Title)</h1>
+                    <h4 class="fw-bolder mt-3">@Html.Raw(Model.Post.Abstract)</h4>
                     <!-- Post meta content-->
                     <div class="text-muted fst-italic mb-2">
-                        Posted on @Html.DisplayFor(model => model.Created) by <a href="https://kaseywahl.io/about.html">Kasey Wahl</a>
+                        Posted on @Html.DisplayFor(model => model.Post.Created) by <a href="https://kaseywahl.io/about.html">Kasey Wahl</a>
                         <!--Admin Options-->
                         @if (User.IsInRole("Administrator"))
                         {
-                            <a class="badge bg-info text-decoration-none link-light" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                            <a class="badge bg-info text-decoration-none link-light" asp-action="Create" asp-route-id="@Model.Id">Create New</a>
+                            <a class="badge bg-info text-decoration-none link-light" asp-action="Edit" asp-route-id="@Model.Post.Id">Edit</a>
+                            <a class="badge bg-info text-decoration-none link-light" asp-action="Create" asp-route-id="@Model.Post.Id">Create New</a>
                             <a class="badge bg-info text-decoration-none link-light" asp-action="Index">See All</a>
                         }
                     </div>
-                   
+
 
                     <!-- Post categories-->
                     <!--Loop over BlogIds and create links to the categories?-->
-                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Development</a>
-                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Tutorial</a>
+
+
 
                 </header>
                 <!-- Preview image figure-->
-                <figure class="mb-4"><img class="img-fluid rounded" src=" @_fileService.DecodeImage(Model.ImageData, Model.ContentType)" alt="..." /></figure>
+                <figure class="mb-4"><img class="img-fluid rounded" src=" @_fileService.DecodeImage(Model.Post.ImageData, Model.Post.ContentType)" alt="..." /></figure>
                 <!-- Post content-->
                 <section class="mb-5">
-                    <div>@Html.Raw(Model.Content)</div>
+                    <div>@Html.Raw(Model.Post.Content)</div>
                 </section>
             </article>
             <!-- Comments section-->
@@ -106,16 +106,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <ul class="list-unstyled mb-0">
-                                <li><a href="#!">Web Design</a></li>
-                                <li><a href="#!">HTML</a></li>
-                                <li><a href="#!">Freebies</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6">
-                            <ul class="list-unstyled mb-0">
-                                <li><a href="#!">JavaScript</a></li>
-                                <li><a href="#!">CSS</a></li>
-                                <li><a href="#!">Tutorials</a></li>
+                                @foreach (var blog in Model.Blogs)
+                                {
+                                <li><a class="badge bg-secondary text-decoration-none link-light" asp-action="BlogPostIndex" asp-route-id="@blog.Id">@blog.Name</a></li>
+                                }
                             </ul>
                         </div>
                     </div>

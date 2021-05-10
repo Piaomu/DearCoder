@@ -9,6 +9,7 @@ using DearCoder.Data;
 using DearCoder.Models;
 using DearCoder.Services;
 using Microsoft.Extensions.Configuration;
+using DearCoder.ViewModels;
 
 namespace DearCoder.Controllers
 {
@@ -60,7 +61,13 @@ namespace DearCoder.Controllers
                 return NotFound();
             }
 
-            return View(post);
+            var dataVM = new PostDetailsViewModel()
+            {
+                Post = post,
+                Blogs = await _context.Blogs.ToListAsync()
+            };
+
+            return View(dataVM);
         }
 
         // GET: Posts/Create
