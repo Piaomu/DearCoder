@@ -10,6 +10,13 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
+            <h1 class="mb-3">
+                <!--WHY CAN'T I GET THIS TO DISPLAY? DO I NEED TO USE A VIEWMODEL AGAIN? Okay, I know it's because I'm using the IEnumerable interface, 
+                    and that's iterating over all the instances of posts, but all of them on this page share the same foreign key, so how can I access that
+                    property alone and display it?-->
+                At post.BlogId
+            </h1>
+            <hr />
             @foreach (var post in Model.OrderByDescending(c => c.Created))
             {
                 <div class="post-preview row">
@@ -20,7 +27,7 @@
                         </a>
                         <p class="post-meta">
                             posted by
-                            <a href="#!">Kasey Wahl</a>
+                            <a href="https://kaseywahl.io/about.html" target="_blank">Kasey Wahl</a>
                             on @post.Created.ToString("MMM, dd, yyyy")
                         </p>
                         <div class="col">
