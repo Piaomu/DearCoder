@@ -10,6 +10,7 @@ using DearCoder.Models;
 using DearCoder.Services;
 using Microsoft.Extensions.Configuration;
 using DearCoder.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DearCoder.Controllers
 {
@@ -75,6 +76,7 @@ namespace DearCoder.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
@@ -108,6 +110,7 @@ namespace DearCoder.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -168,6 +171,7 @@ namespace DearCoder.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

@@ -84,7 +84,7 @@ namespace DearCoder.Controllers
             }
             return View(blog);
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Blogs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -144,7 +144,7 @@ namespace DearCoder.Controllers
             }
             return View(blog);
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Blogs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
