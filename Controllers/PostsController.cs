@@ -19,12 +19,14 @@ namespace DearCoder.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
         private readonly IConfiguration _configuration;
+        private readonly BasicSlugService _slugService;
 
-        public PostsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration)
+        public PostsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration, BasicSlugService slugService)
         {
             _context = context;
             _fileService = fileService;
             _configuration = configuration;
+            _slugService = slugService;
         }
 
         public async Task<ActionResult> BlogPostIndex(int? id)
@@ -100,6 +102,19 @@ namespace DearCoder.Controllers
                 post.ContentType = post.ImageFile is null ?
                                     _configuration["DefaultPostImage"].Split('.')[1] :
                                     _fileService.ContentType(post.ImageFile);
+
+                //Slug stuff goes here...
+
+                var slug = _slugService.UrlFriendly(post.Title);
+                if (!_slugService.IsUnique(slug))
+                {
+                    //I must now add a Model Error and inform the user of the problem
+                    ModelState.AddModelError("Title", "There is an issue with the Title. Please try again.");
+                    ModelState.AddModelError("", "Where does this thing show up?");
+                    return View(post);
+                }
+
+                post.Slug = slug;
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
