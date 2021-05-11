@@ -51,9 +51,9 @@ namespace DearCoder.Controllers
         }
 
         // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string slug)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(slug))
             {
                 return NotFound();
             }
@@ -62,7 +62,7 @@ namespace DearCoder.Controllers
                 .Include(p => p.Blog)
                 .Include(p => p.Comments)
                 .ThenInclude(c => c.Author)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Slug == slug);
             if (post == null)
             {
                 return NotFound();
@@ -111,6 +111,7 @@ namespace DearCoder.Controllers
                     //I must now add a Model Error and inform the user of the problem
                     ModelState.AddModelError("Title", "There is an issue with the Title. Please try again.");
                     ModelState.AddModelError("", "Where does this thing show up?");
+                    ModelState.AddModelError("", "How about this one?");
                     return View(post);
                 }
 
@@ -147,7 +148,7 @@ namespace DearCoder.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BlogId,Title,Abstract,Content,PublishState,ImageFile")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Created,Slug,Title,Abstract,Content,PublishState,ImageFile,ImageData")] Post post)
         {
             if (id != post.Id)
             {
@@ -158,12 +159,24 @@ namespace DearCoder.Controllers
             {
                 try
                 {
-                    post.ImageData = (await _fileService.EncodeFileAsync(post.ImageFile)) ??
-                             await _fileService.EncodeFileAsync(_configuration["DefaultPostImage"]);
+                    var newSlug = _slugService.UrlFriendly(post.Title);
+                    //I need to compare the original slug with the current slug
+                    if(post.Slug != newSlug)
+                    {
+                        if (!_slugService.IsUnique(newSlug))
+                        {
+                            ModelState.AddModelError("Title", "There is an issue with the Title, please try again");
+                        }
+                        post.Slug = newSlug;
+                    }
 
-                    post.ContentType = post.ImageFile is null ?
-                                        _configuration["DefaultPostImage"].Split('.')[1] :
-                                        _fileService.ContentType(post.ImageFile);
+                    if (post.ImageFile is not null)
+                    {
+                        post.ImageData = await _fileService.EncodeFileAsync(post.ImageFile);
+                        post.ContentType = _fileService.ContentType(post.ImageFile);
+                    }
+                    
+                    post.Updated = DateTime.Now;
 
                     _context.Update(post);
                     await _context.SaveChangesAsync();

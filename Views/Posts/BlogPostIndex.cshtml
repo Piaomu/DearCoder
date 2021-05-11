@@ -14,7 +14,7 @@
             {
                 <div class="post-preview row">
                     <div class="col">
-                        <a href="post.html">
+                        <a asp-controller="Posts" asp-action="Details" asp-route-slug="@post.Slug">
                             <h2 class="post-title">@post.Title</h2>
                             <h3 class="post-subtitle">@post.Abstract</h3>
                         </a>
@@ -24,7 +24,7 @@
                             on @post.Created.ToString("MMM, dd, yyyy")
                         </p>
                         <div class="col">
-                            <a class="btn btn-dark btn-sm btn-block" asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id">Read Full Post</a>
+                            <a class="btn btn-dark btn-sm btn-block" asp-controller="Posts" asp-action="Details" asp-route-slug="@post.Slug">Read Full Post</a>
                         </div>
                     </div>
                     <div class="col">

@@ -73,6 +73,11 @@ namespace DearCoder
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "SEO_Route",
+                    pattern: "KaseysPosts/SEOFriendly/{slug}",
+                    defaults: new {controller = "Posts", action = "Details"});
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
