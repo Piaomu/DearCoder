@@ -45,9 +45,13 @@ namespace DearCoder
             services.AddRazorPages();
 
             services.AddScoped<IFileService, BasicFileService>();
+            services.AddScoped<IEmailSender, GmailEmailService>();
+
             services.AddScoped<DataService>();
             services.AddScoped<BasicSlugService>();
-            services.AddScoped<IEmailSender, GmailEmailService>();
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
