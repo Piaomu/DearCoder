@@ -12,6 +12,10 @@
 <!--Copy body of template landing page here-->
 <!-- main content-->
 <div class="container">
+<div class="h1 font-weight-bold">
+    Blog Categories
+</div>
+    <hr/>
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             @foreach (var blog in Model.OrderByDescending(c => c.Created))
@@ -48,7 +52,7 @@
 <hr />
 
 <div class="row">
-    <div class="col h3">
+    <div class="col h4">
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount 
     </div>
 </div>

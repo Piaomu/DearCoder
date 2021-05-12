@@ -34,6 +34,9 @@ namespace DearCoder.Controllers
 
         public async Task<ActionResult> BlogPostIndex(int? id)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             if (id == null)
             {
                 return NotFound();
