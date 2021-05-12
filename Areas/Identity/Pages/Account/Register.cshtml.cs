@@ -90,6 +90,9 @@ namespace DearCoder.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }

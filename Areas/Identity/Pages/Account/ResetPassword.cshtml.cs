@@ -47,6 +47,9 @@ namespace DearCoder.Areas.Identity.Pages.Account
 
         public IActionResult OnGet(string code = null)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             if (code == null)
             {
                 return BadRequest("A code must be supplied for password reset.");

@@ -23,6 +23,9 @@ namespace DearCoder.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             //Load the view with all blog data
             var allBlogs = await _context.Blogs.ToListAsync();
 

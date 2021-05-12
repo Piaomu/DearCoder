@@ -11,6 +11,8 @@ namespace DearCoder.Areas.Identity.Pages.Account
     {
         public void OnGet()
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
         }
     }
 }

@@ -56,6 +56,9 @@ namespace DearCoder.Areas.Identity.Pages.Account
 
         public IActionResult OnGetAsync()
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             return RedirectToPage("./Login");
         }
 

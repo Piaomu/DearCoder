@@ -81,6 +81,9 @@ namespace DearCoder.Controllers
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
             return View();
         }
@@ -129,6 +132,11 @@ namespace DearCoder.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
+
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
+
             if (id == null)
             {
                 return NotFound();
@@ -202,6 +210,10 @@ namespace DearCoder.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
+
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             if (id == null)
             {
                 return NotFound();

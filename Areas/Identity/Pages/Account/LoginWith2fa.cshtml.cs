@@ -45,6 +45,9 @@ namespace DearCoder.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(bool rememberMe, string returnUrl = null)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             // Ensure the user has gone through the username & password screen first
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
 

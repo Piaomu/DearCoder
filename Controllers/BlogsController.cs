@@ -31,6 +31,9 @@ namespace DearCoder.Controllers
         // GET: Blogs
         public async Task<IActionResult> Index()
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             return View(await _context.Blogs.ToListAsync());
         }
 
@@ -56,6 +59,9 @@ namespace DearCoder.Controllers
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             return View();
         }
 
@@ -88,6 +94,10 @@ namespace DearCoder.Controllers
         // GET: Blogs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             if (id == null)
             {
                 return NotFound();
@@ -148,6 +158,10 @@ namespace DearCoder.Controllers
         // GET: Blogs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             if (id == null)
             {
                 return NotFound();

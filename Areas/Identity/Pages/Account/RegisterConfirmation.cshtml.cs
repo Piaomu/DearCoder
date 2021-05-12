@@ -30,6 +30,9 @@ namespace DearCoder.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             if (email == null)
             {
                 return RedirectToPage("/Index");
