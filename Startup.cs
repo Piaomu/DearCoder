@@ -49,6 +49,7 @@ namespace DearCoder
 
             services.AddScoped<DataService>();
             services.AddScoped<BasicSlugService>();
+            services.AddScoped<SearchService>();
 
 
 
