@@ -1,0 +1,63 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@using DearCoder.Services
+
+@model IPagedList<Post>
+@inject IFileService _fileService
+
+@{
+    ViewData["Title"] = "Search Reults Page";
+}
+<!--Copy body of template landing page here-->
+<!-- main content-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            @foreach (var post in Model.OrderByDescending(c => c.Created))
+            {
+                <div class="post-preview row">
+                    <div class="col">
+                        <a href="post.html">
+                            <h2 class="post-title">@post.Title</h2>
+                            <h3 class="post-subtitle">@post.Abstract</h3>
+                        </a>
+                        <p class="post-meta">
+                            posted by
+                            <a href="https://kaseywahl.io/about.html" target="_blank">Kasey Wahl</a>
+                            on @post.Created.ToString("MMM, dd, yyyy")
+                        </p>
+                        <div class="col">
+                            <a class="btn btn-dark btn-sm btn-block" asp-action="Details" asp-route-slug="@post.Slug">Read Details</a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <img id="BlogImage" class="img-fluid" src=" @_fileService.DecodeImage(post.ImageData, post.ContentType)" />
+                    </div>
+                </div>
+                <hr />
+            }
+
+
+            <hr />
+        </div>
+    </div>
+</div>
+<hr />
+
+<div class="row">
+    <div class="col h3">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        @Html.PagedListPager(Model, page => Url.Action("SearchIndex", new { page = page, searchString = ViewData["SearchString"]}),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new String[] { "page-link" }
+            })
+    </div>
+</div>

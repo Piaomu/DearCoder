@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace DearCoder.Controllers
 {
@@ -21,13 +22,18 @@ namespace DearCoder.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> IndexAsync(int? page)
         {
             ViewData["HeaderText"] = "Dear Coder";
             ViewData["SubheaderText"] = "Tech letters from Kasey";
 
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
+
+
             //Load the view with all blog data
-            var allBlogs = await _context.Blogs.ToListAsync();
+            var allBlogs = await _context.Blogs.OrderByDescending(b => b.Created)
+                                               .ToPagedListAsync(pageNumber, pageSize);
 
             return View(allBlogs);
         }

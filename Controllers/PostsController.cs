@@ -11,6 +11,7 @@ using DearCoder.Services;
 using Microsoft.Extensions.Configuration;
 using DearCoder.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using X.PagedList;
 
 namespace DearCoder.Controllers
 {
@@ -20,13 +21,15 @@ namespace DearCoder.Controllers
         private readonly IFileService _fileService;
         private readonly IConfiguration _configuration;
         private readonly BasicSlugService _slugService;
+        private readonly SearchService _searchService;
 
-        public PostsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration, BasicSlugService slugService)
+        public PostsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration, BasicSlugService slugService, SearchService searchService)
         {
             _context = context;
             _fileService = fileService;
             _configuration = configuration;
             _slugService = slugService;
+            _searchService = searchService;
         }
 
         public async Task<ActionResult> BlogPostIndex(int? id)
@@ -86,6 +89,23 @@ namespace DearCoder.Controllers
 
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SearchIndex(int? page, string searchString)
+        {
+            ViewData["SearchString"] = searchString;
+
+            //Step 1: I need a set of results stemming from this search string
+            var posts = _searchService.SearchContent(searchString);
+
+            var pageNumber = page ?? 1;
+            var pageSize = 2;
+            
+
+
+            return View( await posts.ToPagedListAsync(pageNumber, pageSize));
         }
 
         // POST: Posts/Create
