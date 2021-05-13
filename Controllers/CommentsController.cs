@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using DearCoder.Data;
 using DearCoder.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DearCoder.Controllers
 {
+    [Authorize]
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -61,10 +63,11 @@ namespace DearCoder.Controllers
             {
                 comment.Created = DateTime.Now;
                 comment.AuthorId = _userManager.GetUserId(User);
+                var post = _context.Posts.Find(comment.PostId);
 
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Posts", new { id = comment.PostId });
+                return RedirectToAction("Details", "Posts", new { slug = post.Slug });
             }
             ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
             ViewData["ModeratorId"] = new SelectList(_context.Users, "Id", "Id", comment.ModeratorId);
@@ -96,7 +99,7 @@ namespace DearCoder.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PostId,AuthorId,ModeratorId,Body,Created,Moderated,ModeratedBody,ModerationType")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PostId,AuthorId,Body,Created,ModeratedBody,ModerationType")] Comment comment)
         {
             if (id != comment.Id)
             {
@@ -107,6 +110,17 @@ namespace DearCoder.Controllers
             {
                 try
                 {
+                    var user = await _userManager.GetUserAsync(User);
+                    string editNotice = $"Edited by: {user.FullName} <br />On: {DateTime.Now:MMM/dd/yyyy}<br />";
+                    if (comment.ModeratedBody is not null)
+                    {
+                        comment.Body = editNotice + comment.ModeratedBody;
+                        comment.Moderated = DateTime.Now;
+                    }
+                    else
+                    {
+                        comment.Body = editNotice + comment.Body;
+                    }
                     _context.Update(comment);
                     await _context.SaveChangesAsync();
                 }
@@ -121,7 +135,8 @@ namespace DearCoder.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                var post = _context.Posts.Find(comment.PostId);
+                return RedirectToAction("Details", "Posts", new { slug = post.Slug });
             }
             ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
             ViewData["ModeratorId"] = new SelectList(_context.Users, "Id", "Id", comment.ModeratorId);

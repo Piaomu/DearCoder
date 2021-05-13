@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using DearCoder.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using X.PagedList;
+using Microsoft.AspNetCore.Http;
+
 
 namespace DearCoder.Controllers
 {
@@ -32,17 +34,22 @@ namespace DearCoder.Controllers
             _searchService = searchService;
         }
 
-        public async Task<ActionResult> BlogPostIndex(int? id)
+        public async Task<ActionResult> BlogPostIndex(int? id, int? page)
         {
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
             ViewData["HeaderText"] = "Dear Coder";
             ViewData["SubheaderText"] = "Tech letters from Kasey";
 
-            if (id == null)
+            if (page == null)
             {
                 return NotFound();
             }
 
-            var blogPosts = await _context.Posts.Where(p => p.BlogId == id).ToListAsync();
+
+
+            var blogPosts = await _context.Posts.OrderByDescending(p => p.Created)
+                                               .ToPagedListAsync(pageNumber, pageSize);
             return View(blogPosts);
         }
 
@@ -179,7 +186,7 @@ namespace DearCoder.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Created,Slug,Title,Abstract,Content,PublishState,ImageFile,ImageData")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Created,Slug,Title,Abstract,Content,PublishState,ContentType")] Post post, IFormFile newImageFile)
         {
             if (id != post.Id)
             {
@@ -201,10 +208,10 @@ namespace DearCoder.Controllers
                         post.Slug = newSlug;
                     }
 
-                    if (post.ImageFile is not null)
+                    if (newImageFile is not null)
                     {
-                        post.ImageData = await _fileService.EncodeFileAsync(post.ImageFile);
-                        post.ContentType = _fileService.ContentType(post.ImageFile);
+                        post.ImageData = await _fileService.EncodeFileAsync(newImageFile);
+                        post.ContentType = _fileService.ContentType(newImageFile);
                     }
                     
                     post.Updated = DateTime.Now;
@@ -223,7 +230,7 @@ namespace DearCoder.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new {slug = post.Slug });
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             return View(post);

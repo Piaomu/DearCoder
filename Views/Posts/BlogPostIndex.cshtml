@@ -1,5 +1,8 @@
 ﻿@using DearCoder.Services
-@model IEnumerable<Post>
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@model IPagedList<Post>
 @inject IFileService _fileService
 
 @{
@@ -11,9 +14,9 @@
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             <h1 class="mb-3">
-                <!--WHY CAN'T I GET THIS TO DISPLAY? DO I NEED TO USE A VIEWMODEL AGAIN? Okay, I know it's because I'm using the IEnumerable interface, 
-                    and that's iterating over all the instances of posts, but all of them on this page share the same foreign key, so how can I access that
-                    property alone and display it?-->
+                <!--WHY CAN'T I GET THIS TO DISPLAY? DO I NEED TO USE A VIEWMODEL AGAIN? Okay, I know it's because I'm using the IEnumerable interface,
+                and that's iterating over all the instances of posts, but all of them on this page share the same foreign key, so how can I access that
+                property alone and display it?-->
                 At post.BlogId
             </h1>
             <hr />
@@ -47,7 +50,22 @@
 
             <hr />
             <!-- pager-->
-            <div class="clearfix"><a class="btn btn-primary float-right" href="#!">older posts →</a></div>
+            <div class="row">
+                <div class="col h4">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+                        new PagedListRenderOptions
+                        {
+                            LiElementClasses = new string[] { "page-item" },
+                            PageClasses = new String[] { "page-link" }
+                        })
+                </div>
+            </div>
         </div>
     </div>
 </div>
