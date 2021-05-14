@@ -34,22 +34,19 @@ namespace DearCoder.Controllers
             _searchService = searchService;
         }
 
-        public async Task<ActionResult> BlogPostIndex(int? id, int? page)
+        public async Task<ActionResult> BlogPostIndex(int id, int? page)
         {
             var pageNumber = page ?? 1;
             var pageSize = 5;
             ViewData["HeaderText"] = "Dear Coder";
             ViewData["SubheaderText"] = "Tech letters from Kasey";
 
-            if (page == null)
-            {
-                return NotFound();
-            }
 
 
+            var blogPosts = await _context.Posts.Where(p => p.BlogId == id)
+                                                            .OrderByDescending(b => b.Created)
+                                                            .ToPagedListAsync(page, pageSize);
 
-            var blogPosts = await _context.Posts.OrderByDescending(p => p.Created)
-                                               .ToPagedListAsync(pageNumber, pageSize);
             return View(blogPosts);
         }
 
@@ -101,6 +98,7 @@ namespace DearCoder.Controllers
             return View();
         }
 
+        //Search Index
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SearchIndex(int? page, string searchString)
