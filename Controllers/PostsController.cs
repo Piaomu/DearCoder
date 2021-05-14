@@ -45,7 +45,7 @@ namespace DearCoder.Controllers
 
             var blogPosts = await _context.Posts.Where(p => p.BlogId == id)
                                                             .OrderByDescending(b => b.Created)
-                                                            .ToPagedListAsync(page, pageSize);
+                                                            .ToPagedListAsync(pageNumber, pageSize);
 
             return View(blogPosts);
         }
@@ -63,6 +63,9 @@ namespace DearCoder.Controllers
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(string slug)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             if (string.IsNullOrEmpty(slug))
             {
                 return NotFound();
@@ -103,6 +106,8 @@ namespace DearCoder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SearchIndex(int? page, string searchString)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
             ViewData["SearchString"] = searchString;
 
             //Step 1: I need a set of results stemming from this search string
@@ -123,6 +128,8 @@ namespace DearCoder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,PublishState,ImageFile")] Post post)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
             if (ModelState.IsValid)
             {
                 post.Created = DateTime.Now;
@@ -186,6 +193,8 @@ namespace DearCoder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Created,Slug,Title,Abstract,Content,PublishState,ContentType")] Post post, IFormFile newImageFile)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
             if (id != post.Id)
             {
                 return NotFound();

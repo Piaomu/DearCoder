@@ -21,14 +21,14 @@
                 <header class="mb-4">
                     <!-- Post title-->
                     <h1 class="fw-bolder mb-1">@Html.Raw(Model.Post.Title)</h1>
-                    <h4 class="fw-bolder mt-3">@Html.Raw(Model.Post.Abstract)</h4>
+                    <h4 class="mt-3 font-weight-normal">@Html.Raw(Model.Post.Abstract)</h4>
                     <!-- Post meta content-->
                     <div class="text-muted fst-italic mb-2">
                         Posted on @Html.DisplayFor(model => model.Post.Created) by <a href="https://kaseywahl.io/about.html">Kasey Wahl</a>
                         <!--Admin Options-->
                         @if (User.IsInRole("Administrator"))
                         {
-                            <a class="badge bg-info text-decoration-none link-light" asp-action="Edit" asp-route-id="@Model.Post.Id">Edit</a>
+                            <a class="badge bg-info text-decoration-none link-light ml-2" asp-action="Edit" asp-route-id="@Model.Post.Id">Edit</a>
                             <a class="badge bg-info text-decoration-none link-light" asp-action="Delete" asp-route-id="@Model.Post.Id">Delete</a>
                             <a class="badge bg-info text-decoration-none link-light" asp-action="Create" asp-route-id="@Model.Post.Id">Create New</a>
                             <a class="badge bg-info text-decoration-none link-light" asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@Model.Post.BlogId">See All</a>
@@ -39,6 +39,7 @@
                 </header>
                 <!-- Preview image figure-->
                 <figure class="mb-4"><img class="img-fluid rounded" src=" @_fileService.DecodeImage(Model.Post.ImageData, Model.Post.ContentType)" alt="..." /></figure>
+                <hr />
                 <!-- Post content-->
                 <section class="mb-5">
                     <div>@Html.Raw(Model.Post.Content)</div>
@@ -47,100 +48,100 @@
             <hr />
 
             @*Count of total comments*@
-            <div class="btn-sm btn-dark btn-block">@Model.Post.Comments.Count Comment(s)</div>
+            <div class="btn-sm btn-dark btn-block Oz h4">@Model.Post.Comments.Count Comment(s)</div>
             @foreach (var comment in Model.Post.Comments)
             {
                 <div class="d-flex mb-4">
-                <!-- Parent comment-->
-                <div class="flex-shrink-0 media p-3"><img class="rounded-circle img-fluid" style="width:60px;" src="@_fileService.DecodeImage(comment.Author.ImageData, comment.Author.ContentType)" alt="@comment.Author.FullName" /></div>
-                <div class="ms-3">
-                    <div class="fw-bold">
-                        @if (comment.Moderated is null)
-                        {
-                            <h4>@comment.Author.FullName</h4> <small>posted on @comment.Created.ToString("MMM dd, yyyy")</small>
-                        }
-                        else
-                        {
-                            <h4>@comment.Author.FullName</h4> <small>posted on @comment.Created.ToString("MMM dd, yyyy")</small>
-                            <h4>This comment has been moderated because of its @comment.ModerationType</h4>
-                        }
+                    <!-- Parent comment-->
+                    <div class="flex-shrink-0 media p-3"><img class="rounded-circle img-fluid" style="width:60px;" src="@_fileService.DecodeImage(comment.Author.ImageData, comment.Author.ContentType)" alt="@comment.Author.FullName" /></div>
+                    <div class="ms-3">
+                        <div class="fw-bold">
+                            @if (comment.Moderated is null)
+                            {
+                                <h4>@comment.Author.FullName</h4> <small>posted on @comment.Created.ToString("MMM dd, yyyy")</small>
+                            }
+                            else
+                            {
+                                <h4>@comment.Author.FullName</h4> <small>posted on @comment.Created.ToString("MMM dd, yyyy")</small>
+                                <h4>This comment has been moderated because of its @comment.ModerationType</h4>
+                            }
 
-                    </div>
-                    <div>
-                        <p>@comment.Body</p>
-                        @if (User.IsInRole("Administrator") || User.IsInRole("Moderator") || (comment.Moderated is null && userManager.GetUserId(User) == comment.AuthorId))
-                        {
-                            <!-- Button trigger modal -->
-                            //Ties the button to the modal through the PK of the comment
-                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit-@comment.Id">
-                                Edit Comment
-                            </button>
+                        </div>
+                        <div>
+                            <p>@comment.Body</p>
+                            @if (User.IsInRole("Administrator") || User.IsInRole("Moderator") || (comment.Moderated is null && userManager.GetUserId(User) == comment.AuthorId))
+                            {
+                                <!-- Button trigger modal -->
+                                //Ties the button to the modal through the PK of the comment
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit-@comment.Id">
+                                    Edit Comment
+                                </button>
 
-                            <!-- Modal -->
-                            //Same Id structure as the button
-                            <div class="modal fade" id="edit-@comment.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Edit Comment</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form asp-controller="Comments" asp-action="Edit" enctype="multipart/form-data">
-                                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                                <input type="hidden" asp-for="@comment.Id" />
-                                                <input type="hidden" name="id" value="@comment.Id" />
-                                                <input type="hidden" asp-for="@comment.PostId" />
-                                                <input type="hidden" asp-for="@comment.AuthorId /">
-                                                <input type="hidden" asp-for="@comment.Created" />
+                                <!-- Modal -->
+                                //Same Id structure as the button
+                                <div class="modal fade" id="edit-@comment.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title Oz" id="exampleModalLabel">Edit Comment</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form asp-controller="Comments" asp-action="Edit" enctype="multipart/form-data">
+                                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                                    <input type="hidden" asp-for="@comment.Id" />
+                                                    <input type="hidden" name="id" value="@comment.Id" />
+                                                    <input type="hidden" asp-for="@comment.PostId" />
+                                                    <input type="hidden" asp-for="@comment.AuthorId /">
+                                                    <input type="hidden" asp-for="@comment.Created" />
 
 
-                                                @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
-                                                {
-                                                    <input asp-for="@comment.Body" type="hidden" class="form-control" />
+                                                    @if (User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+                                                    {
+                                                        <input asp-for="@comment.Body" type="hidden" class="form-control" />
+                                                        <div class="form-group">
+                                                            <label asp-for="@comment.ModerationType" class="control-label Oz"></label>
+                                                            <select asp-for="@comment.ModerationType" asp-items="@Html.GetEnumSelectList<ModerationType>()" class="form-control"></select>
+                                                            <span asp-validation-for="@comment.ModerationType" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label Oz">Original Body</label>
+                                                            <textarea readonly="readonly" class="form-control" asp-for="@comment.Body"></textarea>
+
+                                                            <label asp-for="@comment.ModeratedBody" class="control-label Oz"></label>
+                                                            <textarea asp-for="@comment.ModeratedBody" class="form-control">@comment.Body</textarea>
+                                                            <span asp-validation-for="@comment.ModeratedBody" class="text-danger"></span>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="form-group">
+                                                            <label asp-for="@comment.Body" class="control-label"></label>
+                                                            <input asp-for="@comment.Body" class="form-control" />
+                                                            <span asp-validation-for="@comment.Body" class="text-danger"></span>
+                                                        </div>
+                                                    }
                                                     <div class="form-group">
-                                                        <label asp-for="@comment.ModerationType" class="control-label"></label>
-                                                        <select asp-for="@comment.ModerationType" asp-items="@Html.GetEnumSelectList<ModerationType>()" class="form-control"></select>
-                                                        <span asp-validation-for="@comment.ModerationType" class="text-danger"></span>
+                                                        <input type="submit" value="Save" class="btn btn-primary" />
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Original Body</label>
-                                                        <textarea readonly="readonly" class="form-control" asp-for="@comment.Body"></textarea>
-
-                                                        <label asp-for="@comment.ModeratedBody" class="control-label"></label>
-                                                        <textarea asp-for="@comment.ModeratedBody" class="form-control">@comment.Body</textarea>
-                                                        <span asp-validation-for="@comment.ModeratedBody" class="text-danger"></span>
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="form-group">
-                                                        <label asp-for="@comment.Body" class="control-label"></label>
-                                                        <input asp-for="@comment.Body" class="form-control" />
-                                                        <span asp-validation-for="@comment.Body" class="text-danger"></span>
-                                                    </div>
-                                                }
-                                                <div class="form-group">
-                                                    <input type="submit" value="Save" class="btn btn-primary" />
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
 
 
-                        }
+                            }
+                        </div>
                     </div>
-            </div>
-            <hr />
-        </div>
+                    <hr />
+                </div>
             }
 
             @if (!User.Identity.IsAuthenticated)
@@ -154,21 +155,24 @@
                 <form asp-action="Create" asp-controller="Comments" method="post">
                     <input type="hidden" name="PostId" value="@Model.Post.Id" />
                     <textarea class="form-control" name="Body" rows="3" placeholder="Add a comment..."></textarea>
-                    <button class="btn btn-dark btn-block btn-small" type="submit">Add Comment</button>
+                    <button class="btn btn-dark btn-block btn-small Oz" type="submit">Add Comment</button>
 
                 </form>
             }
         </div>
+
         <!-- Side widgets-->
         <div class="col-lg-4">
             <!-- Search widget-->
             <div class="card mb-4">
-                <div class="card-header">Search</div>
+                <div class="card-header Oz">Search</div>
                 <div class="card-body">
-                    <div class="input-group">
-                        <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                        <button class="btn btn-primary" id="button-search" type="button">Go!</button>
-                    </div>
+                    <form asp-action="SearchIndex" asp-controller="Posts">
+                        <div class="input-group">
+                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                            <button class="btn-sm btn-primary btn-block Oz" id="button-search" type="submit">Search</button>
+                        </div>
+                    </form>
                 </div>
             </div>
             <!-- Categories widget-->
@@ -176,14 +180,18 @@
                 <div class="card-header">Categories</div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="list-unstyled mb-0">
-                                @foreach (var blog in Model.Blogs)
-                                {
-                                <li><a class="badge bg-secondary text-decoration-none link-light" asp-action="BlogPostIndex" asp-route-id="@blog.Id">@blog.Name</a></li>
-                                }
-                            </ul>
-                        </div>
+                        @foreach (var blog in Model.Blogs)
+                        {
+                            <div class="col-sm-6">
+
+                                <ul class="list-unstyled mb-0">
+
+                                    <li><a class="badge bg-secondary text-decoration-none link-light" asp-action="BlogPostIndex" asp-route-id="@blog.Id">@blog.Name</a></li>
+
+                                </ul>
+
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

@@ -12,7 +12,7 @@
 <!-- main content-->
 <div class="container">
     <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="col-lg-8 col-md-10">
             <h1 class="mb-3">
                 <!--WHY CAN'T I GET THIS TO DISPLAY? DO I NEED TO USE A VIEWMODEL AGAIN? Okay, I know it's because I'm using the IEnumerable interface,
                 and that's iterating over all the instances of posts, but all of them on this page share the same foreign key, so how can I access that
@@ -26,46 +26,65 @@
                     <div class="col">
                         <a asp-controller="Posts" asp-action="Details" asp-route-slug="@post.Slug">
                             <h2 class="post-title">@post.Title</h2>
-                            <h3 class="post-subtitle">@post.Abstract</h3>
+                            <h3 class="font-weight-light">@post.Abstract</h3>
                         </a>
-                        <p class="post-meta">
+                        <p class="post-meta font-weight-light">
                             posted by
                             <a href="https://kaseywahl.io/about.html" target="_blank">Kasey Wahl</a>
                             on @post.Created.ToString("MMM, dd, yyyy")
                         </p>
                         <div class="col">
-                            <a class="btn btn-dark btn-sm btn-block" asp-controller="Posts" asp-action="Details" asp-route-slug="@post.Slug">Read Full Post</a>
+                            <a class="btn btn-dark btn-sm btn-block Oz" asp-controller="Posts" asp-action="Details" asp-route-slug="@post.Slug">Read Full Post</a>
                         </div>
                     </div>
                     <div class="col">
-                        <img id="BlogImage" class="img-fluid" src=" @_fileService.DecodeImage(post.ImageData, post.ContentType)" />
-                    </div>
-                    <div class="row">
-
+                        <img id="BlogImage" class="img-fluid" style="width:18rem; height:18rem;" src=" @_fileService.DecodeImage(post.ImageData, post.ContentType)" />
                     </div>
                 </div>
                 <hr />
             }
 
-
             <hr />
-            <!-- Paged List pager-->
-            <div class="row">
-                <div class="col h4">
-                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-4">
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header Oz">Search</div>
+                <div class="card-body">
+                    <form asp-action="SearchIndex" asp-controller="Posts">
+                        <div class="input-group">
+                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                            <button class="btn-sm btn-primary btn-block Oz" id="button-search" type="submit">Search</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col">
-                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
-                        new PagedListRenderOptions
-                        {
-                            LiElementClasses = new string[] { "page-item" },
-                            PageClasses = new String[] { "page-link" }
-                        })
-                </div>
+            <!-- Side widget-->
+            <div class="card mb-4">
+                <div class="card-header">Side Widget</div>
+                <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
             </div>
+        </div>
+
+    </div>
+    <!-- Paged List pager-->
+    <div class="row">
+        <div class="col h4 Oz">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col Oz">
+            @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = @Model.FirstOrDefault()?.BlogId, page = page }),
+                new PagedListRenderOptions
+                {
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new String[] { "page-link" }
+                })
         </div>
     </div>
 </div>
