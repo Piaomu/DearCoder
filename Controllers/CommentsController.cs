@@ -55,6 +55,7 @@ namespace DearCoder.Controllers
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PostId,Body")] Comment comment)
@@ -111,7 +112,7 @@ namespace DearCoder.Controllers
                 try
                 {
                     var user = await _userManager.GetUserAsync(User);
-                    string editNotice = $"Edited by: {user.FullName} <br />On: {DateTime.Now:MMM/dd/yyyy}<br />";
+                    string editNotice = $"<span class='text-muted font-italic'>Edited by: {user.FullName}<br/>On: {DateTime.Now:MMM/dd/yyyy}</span><br/><br/> ";
                     if (comment.ModeratedBody is not null)
                     {
                         comment.Body = editNotice + comment.ModeratedBody;
@@ -173,7 +174,9 @@ namespace DearCoder.Controllers
             var comment = await _context.Comments.FindAsync(id);
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            var post = _context.Posts.Find(comment.PostId);
+            return RedirectToAction("Details", "Posts", new { slug = post.Slug });
         }
 
         private bool CommentExists(int id)
