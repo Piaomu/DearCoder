@@ -75,11 +75,29 @@ namespace DearCoder.Services
                 ContentType = "png"
             };
 
+            var modUser = new BlogUser()
+            {
+                Email = "yogi_bear@gmail.com",
+                UserName = "yogi_bear@gmail.com",
+                GivenName = "Yogi",
+                SurName = "Bear",
+                PhoneNumber = "444-4444",
+                EmailConfirmed = true,
+                ImageData = await _fileService.EncodeFileAsync("yogi.jpg"),
+                ContentType = "jpg"
+            };
+
             //await _userManager.CreateAsync(adminUser, "Abc123!");
             //Only creates the user, doesn't assign user to a role
             await _userManager.CreateAsync(adminUser, _configuration["AdminPassword"]);
             //await _userManager.AddToRoleAsync(adminUser, "Administrator");
             await _userManager.AddToRoleAsync(adminUser, BlogRole.Administrator.ToString());
+
+            //Create the mod user (but not the role yet)
+            await _userManager.CreateAsync(modUser, _configuration["ModPassword"]);
+
+            //Assign mod to the role
+            await _userManager.AddToRoleAsync(modUser, BlogRole.Moderator.ToString());
         }
 
 
