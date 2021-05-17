@@ -15,6 +15,8 @@ namespace DearCoder.Areas.Identity.Pages
 
         public void OnGet()
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }
     }
