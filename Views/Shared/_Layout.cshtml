@@ -112,11 +112,14 @@
         <script src="//cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/summernote-bs4.js"></script>
 
+        <!-- Summer Note Script -->
         <script>
             $(document).ready(function () {
                 $('#Content').summernote();
             });
         </script>
+
+ <!-- Summer Note - Responsive image fix -->    <script>        $(document).ready(function () {            $("img").addClass("img-fluid");            $("img").parent("span").css("width", "auto");            $("img").parent("span").css("height", "auto");        });    </script>
 
         <!-- Core theme JS-->
         <script src="~/js/scripts.js"></script>
