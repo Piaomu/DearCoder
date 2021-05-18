@@ -112,7 +112,7 @@ namespace DearCoder.Controllers
                 try
                 {
                     var user = await _userManager.GetUserAsync(User);
-                    string editNotice = $"<span class='text-muted font-italic'>Edited by: {user.FullName}<br/>On: {DateTime.Now:MMM/dd/yyyy}</span><br/><br/> ";
+                    string editNotice = $"<span class='text-muted'>Edited by: {user.FullName}<br/>{DateTime.Now:MMM/dd/yyyy}</span><br/><br/> ";
                     if (comment.ModeratedBody is not null)
                     {
                         comment.Body = editNotice + comment.ModeratedBody;
