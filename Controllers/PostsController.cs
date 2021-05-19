@@ -99,7 +99,7 @@ namespace DearCoder.Controllers
         public IActionResult Create()
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Please create a post.";
 
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
             return View();
@@ -111,7 +111,7 @@ namespace DearCoder.Controllers
         public async Task<IActionResult> SearchIndex(int? page, string searchString)
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Here are your search results.";
             ViewData["SearchString"] = searchString;
 
             //Step 1: I need a set of results stemming from this search string
@@ -133,7 +133,7 @@ namespace DearCoder.Controllers
         public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,PublishState,ImageFile")] Post post)
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Please create a Post.";
             if (ModelState.IsValid)
             {
                 post.Created = DateTime.Now;
@@ -173,7 +173,7 @@ namespace DearCoder.Controllers
         {
 
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Please edit your post.";
 
 
             if (id == null)
@@ -198,7 +198,7 @@ namespace DearCoder.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Created,Slug,Title,Abstract,Content,PublishState,ContentType")] Post post, IFormFile newImageFile)
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Please edit your post.";
             if (id != post.Id)
             {
                 return NotFound();
@@ -253,7 +253,7 @@ namespace DearCoder.Controllers
         {
 
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Are you sure you want to delete your post?";
 
             if (id == null)
             {
