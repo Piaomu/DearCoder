@@ -46,7 +46,7 @@ namespace DearCoder.Controllers
 
 
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = blogPosts.FirstOrDefault()?.Blog.Name;
+            ViewData["SubheaderText"] = $"Enjoy these {blogPosts.FirstOrDefault()?.Blog.Name}.";
 
             return View(blogPosts);
         }
@@ -78,7 +78,7 @@ namespace DearCoder.Controllers
                 .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
 
-            ViewData["SubheaderText"] = post.Blog.Name;
+            ViewData["SubheaderText"] = $"Enjoy these {post.Blog.Name}.";
 
             if (post == null)
             {
