@@ -18,7 +18,6 @@ namespace DearCoder.Models
         public string SurName { get; set; }
         public string DisplayName { get; set; }
 
-
         public byte[] ImageData { get; set; }
         public string ContentType { get; set; }
 

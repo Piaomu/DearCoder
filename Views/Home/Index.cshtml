@@ -15,32 +15,28 @@
     <div class="h1 font-weight-bold Oz">
         Blog Categories
     </div>
-    <hr />
     <div class="row">
         <div class="col-lg-8 col-md-10">
-            @foreach (var blog in Model.OrderByDescending(c => c.Created))
-            {
-                <div class="post-preview row">
-                    <div class="col">
-                        <a asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id">
-                            <h1 class="post-title Oz">@blog.Name</h1>
-                            <h4 class="font-weight-light Oz">@blog.Description</h4>
-                        </a>
-                        <p class="post-meta Enriqueta font-weight-light">
-                            posted by
-                            <a class="Enriqueta" href="https://kaseywahl.io/about.html" target="_blank">Kasey Wahl</a>
-                            on @blog.Created.ToString("MMM, dd, yyyy")
-                        </p>
-                        <div class="col">
-                            <a class="btn btn-dark btn-sm btn-block Oz" asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id">Read Posts</a>
+            <div class="row">
+                @foreach (var blog in Model.OrderByDescending(c => c.Created))
+                {
+                <div class="col-lg-6 mx-auto">
+                    <div class="card mt-2">
+                        <div class="card-body text-center">
+                            <div>
+                                <h2 class="post-title Oz">@blog.Name</h2>
+                                <hr />
+                                <h5 class="font-weight-light Oz">@blog.Description</h5>
+                            </div>
+                            <div class="card-footer">
+                                <img id="BlogImage" class="card-img" src="@_fileService.DecodeImage(blog.Image, blog.ContentType)" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <img id="BlogImage" class="img-fluid" style="width:18rem; height:14rem;" src=" @_fileService.DecodeImage(blog.Image, blog.ContentType)" />
+                        <a class="btn btn-dark btn-block Oz" asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id">Read Posts</a>
                     </div>
                 </div>
-                <hr />
-            }
+                }
+            </div>
             <hr />
         </div>
 
@@ -79,10 +75,6 @@
 
 <!-- Page List pager-->
 @if (Model.PageCount > 1)
-{
-
-}
-else
 {
 <div class="row">
     <div class="col h4 Oz">
