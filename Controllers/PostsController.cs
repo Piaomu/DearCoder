@@ -37,15 +37,16 @@ namespace DearCoder.Controllers
         public async Task<ActionResult> BlogPostIndex(int id, int? page)
         {
             var pageNumber = page ?? 1;
-            var pageSize = 5;
-            ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
-
-
+            var pageSize = 4;
 
             var blogPosts = await _context.Posts.Where(p => p.BlogId == id)
+                                                            .Include(p => p.Blog)
                                                             .OrderByDescending(b => b.Created)
                                                             .ToPagedListAsync(pageNumber, pageSize);
+
+
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = blogPosts.FirstOrDefault()?.Blog.Name;
 
             return View(blogPosts);
         }
@@ -63,8 +64,8 @@ namespace DearCoder.Controllers
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(string slug)
         {
+            
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
 
             if (string.IsNullOrEmpty(slug))
             {
@@ -76,6 +77,9 @@ namespace DearCoder.Controllers
                 .Include(p => p.Comments)
                 .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
+
+            ViewData["SubheaderText"] = post.Blog.Name;
+
             if (post == null)
             {
                 return NotFound();
