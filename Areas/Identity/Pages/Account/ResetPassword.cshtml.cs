@@ -48,7 +48,7 @@ namespace DearCoder.Areas.Identity.Pages.Account
         public IActionResult OnGet(string code = null)
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Please enter a new password.";
 
             if (code == null)
             {

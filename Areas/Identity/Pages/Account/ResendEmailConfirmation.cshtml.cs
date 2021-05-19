@@ -39,7 +39,7 @@ namespace DearCoder.Areas.Identity.Pages.Account
         public void OnGet()
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Let's try it again.";
         }
 
         public async Task<IActionResult> OnPostAsync()

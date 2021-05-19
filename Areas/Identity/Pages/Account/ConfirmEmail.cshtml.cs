@@ -28,7 +28,6 @@ namespace DearCoder.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
 
             if (userId == null || code == null)
             {
@@ -44,6 +43,8 @@ namespace DearCoder.Areas.Identity.Pages.Account
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+
+            ViewData["HeaderText"] = result.Succeeded ? "You did it!" : "Please try again!";
             return Page();
         }
     }

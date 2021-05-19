@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
+using Microsoft.AspNetCore.Identity;
 
 namespace DearCoder.Controllers
 {
@@ -16,15 +17,25 @@ namespace DearCoder.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        private readonly UserManager<BlogUser> _userManager;
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, UserManager<BlogUser> userManager)
         {
             _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> IndexAsync(int? page)
         {
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName},";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+
             ViewData["SubheaderText"] = "Tech letters from Kasey";
 
             var pageNumber = page ?? 1;
