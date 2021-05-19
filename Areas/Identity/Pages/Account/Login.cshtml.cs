@@ -58,7 +58,7 @@ namespace DearCoder.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Please enter your username and password to log in.";
 
             if (!string.IsNullOrEmpty(ErrorMessage))
             {

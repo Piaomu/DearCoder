@@ -31,7 +31,7 @@ namespace DearCoder.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "You're almost confirmed!";
 
             if (email == null)
             {

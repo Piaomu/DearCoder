@@ -60,7 +60,7 @@ namespace DearCoder.Controllers
         public IActionResult Create()
         {
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Please create a blog category.";
 
             return View();
         }
@@ -96,7 +96,7 @@ namespace DearCoder.Controllers
         {
 
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Please edit your blog category.";
 
             if (id == null)
             {
@@ -160,7 +160,7 @@ namespace DearCoder.Controllers
         {
 
             ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = "Tech letters from Kasey";
+            ViewData["SubheaderText"] = "Are you sure you want to delete this blog category?";
 
             if (id == null)
             {
