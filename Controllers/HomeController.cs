@@ -29,7 +29,7 @@ namespace DearCoder.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName},";
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
             }
             else
             {
