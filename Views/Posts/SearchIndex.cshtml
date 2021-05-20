@@ -13,33 +13,66 @@
 <!-- main content-->
 <div class="container">
     <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-            @foreach (var post in Model.OrderByDescending(c => c.Created))
-            {
-                <div class="post-preview row">
-                    <div class="col">
-                        <a href="post.html">
-                            <h2 class="post-title">@post.Title</h2>
-                            <h3 class="post-subtitle">@post.Abstract</h3>
-                        </a>
-                        <p class="post-meta">
-                            posted by
-                            <a href="https://kaseywahl.io/about.html" target="_blank">Kasey Wahl</a>
-                            on @post.Created.ToString("MMM, dd, yyyy")
-                        </p>
-                        <div class="col">
-                            <a class="btn btn-dark btn-sm btn-block" asp-action="Details" asp-route-slug="@post.Slug">Read Details</a>
+        <div class="col-lg-8 col-md-10">
+            <div class="row">
+                @foreach (var post in Model.OrderByDescending(c => c.Created))
+                {
+                    <div class="col-lg-6 mx-auto">
+                        <div class="card mt-2 h-100">
+                            <div class="card-body">
+                                <div>
+                                    <a asp-controller="Posts" asp-action="Details" asp-route-slug="@post.Slug">
+                                        <h2 class="post-title Oz text-center">@post.Title</h2>
+                                        <hr />
+                                        <h4 class="font-weight-light Oz">@post.Abstract</h4>
+                                    </a>
+                                    <hr />
+                                    <p class="post-meta font-weight-light text-muted font-italic m-0">
+                                        posted by
+                                        <a href="https://kaseywahl.io/about.html" target="_blank">Kasey Wahl</a>
+                                        on @post.Created.ToString("MMM, dd, yyyy")
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <img id="BlogImage" class="card-img" src="@_fileService.DecodeImage(post.ImageData, post.ContentType)" />
+                                </div>
+                            </div>
+                            <a class="btn btn-dark btn-sm btn-block Oz" asp-controller="Posts" asp-action="Details" asp-route-slug="@post.Slug">Read Full Post</a>
                         </div>
                     </div>
-                    <div class="col">
-                        <img id="BlogImage" class="img-fluid" src=" @_fileService.DecodeImage(post.ImageData, post.ContentType)" />
-                    </div>
-                </div>
-                <hr />
-            }
-
-
+                }
+            </div>
             <hr />
+        </div>
+
+        <!-- Side widgets-->
+        <div class="col-lg-4">
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header Oz">Search</div>
+                <div class="card-body">
+                    <form asp-action="SearchIndex" asp-controller="Posts">
+                        <div class="input-group">
+                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                            <button class="btn-sm btn-primary btn-block Oz" id="button-search" type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Author widget-->
+            <div class="card mb-4">
+                <div class="card-header Oz">About Kasey</div>
+                <div class="card-body">
+                    I love to make cool things with great people.
+                    <br />
+                    <br />
+                    Let's grab a coffee and chat! (in person or on Zoom).
+                    <br />
+                    <br />
+                    Connect with me on <a href="https://github.com/Piaomu" target="_blank"><span class="text-info">Github,</span> </a> <a href="https://www.linkedin.com/in/kasey-wahl-24073084/" target="_blank"><span class="text-info">LinkedIn</span></a>, <a href="https://twitter.com/KaseyWahl8" target="_blank"><span class="text-info">Twitter</span></a>, or my personal website, <a href="https://kaseywahl.io/" target="_blank"> <span class="text-info">kaseywahl.io</span></a>.
+                </div>
+            </div>
         </div>
     </div>
 </div>
