@@ -25,6 +25,7 @@ namespace DearCoder.Controllers
         }
 
         // GET: Comments
+        [Authorize(Roles = "Administrator, Moderator")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Comments.Include(c => c.Author).Include(c => c.Moderator).Include(c => c.Post);
