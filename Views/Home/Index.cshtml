@@ -2,8 +2,9 @@
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
 @using DearCoder.Services
+@using DearCoder.ViewModels
 
-@model IPagedList<Blog>
+@model IndexPostViewModel
 @inject IFileService _fileService
 
 @{
@@ -12,34 +13,20 @@
 <!--Copy body of template landing page here-->
 <!-- main content-->
 <div class="container-fluid">
-    <div class="h1 font-weight-bold Oz">
-        Blog Categories
-    </div>
     <div class="row">
-        <div class="col-lg-8 col-md-10">
-            <div class="row">
-                @foreach (var blog in Model.OrderByDescending(c => c.Created))
-                {
-                <div class="col-lg-6 mx-auto">
-                    <div class="card mt-2 h-100">
-                        <div class="card-body text-center">
-                            <div>
-                                <h2 class="post-title Oz">@blog.Name</h2>
-                                <hr />
-                                <h5 class="font-weight-light Oz">@blog.Description</h5>
-                            </div>
-                            <div class="card-footer">
-                                <img id="BlogImage" class="card-img" src="@_fileService.DecodeImage(blog.Image, blog.ContentType)" />
-                            </div>
-                        </div>
-                        <a class="btn btn-dark btn-block Oz" asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id">Read Posts</a>
+        <div class="col-8">
+            <div class="card shadow">
+                <h2 class="card-header">Latest Post</h2>
+                <div class="card-body">
+                    <a asp-controller="Posts" asp-action="Details" asp-route-slug="@Model.LatestPost.Slug" class="card-title h4 Oz">@Model.LatestPost.Title</a>
+                    <p class="card-text">@Model.LatestPost.Abstract</p>
+                    <div class="card-img mb-1">
+                        <img src="@_fileService.DecodeImage(Model.LatestPost.ImageData, Model.LatestPost.ContentType)" class="img-fluid rounded" />
                     </div>
+                    <a asp-controller="Posts" asp-action="Details" asp-route-slug="@Model.LatestPost.Slug" class="btn btn-primary rounded mt-3">Read Post</a>
                 </div>
-                }
             </div>
-            <hr />
         </div>
-
         <!-- Side widgets-->
         <div class="col-lg-4">
             <!-- Search widget-->
@@ -70,26 +57,55 @@
             </div>
         </div>
     </div>
-</div>
-<hr />
+    <br />
+    <div class="h1 font-weight-bold Oz text-center m-4">
+        Blog Categories
+     </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-10">
+                <div class="row">
+                    @foreach (var blog in Model.Blogs.OrderByDescending(c => c.Created))
+                    {
+                        <div class="col-lg-6 mx-auto mb-3">
+                            <div class="card mb-3 h-100 shadow">
+                                <div class="card-body text-center">
+                                    <div>
+                                        <h2 class="post-title Oz">@blog.Name</h2>
+                                        <hr />
+                                        <h5 class="font-weight-light Oz">@blog.Description</h5>
+                                    </div>
+                                    <div class="card-footer">
+                                        <img id="BlogImage" class="card-img" src="@_fileService.DecodeImage(blog.Image, blog.ContentType)" />
+                                    </div>
+                                </div>
+                                <a class="btn btn-dark btn-block Oz" asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@blog.Id">Read Posts</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <hr />
+            </div>
+        </div>
+    <hr />
 
-<!-- Page List pager-->
-@if (Model.PageCount > 1)
-{
-<div class="row">
-    <div class="col h4 Oz">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-    </div>
-</div>
+    <!-- Page List pager-->
+    @if (Model.Blogs.PageCount > 1)
+    {
+        <div class="row">
+            <div class="col h4 Oz">
+                Page @(Model.Blogs.PageCount < Model.Blogs.PageNumber ? 0 : Model.Blogs.PageNumber) of @Model.Blogs.PageCount
+            </div>
+        </div>
 
-<div class="row">
-    <div class="col Oz">
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
-             new PagedListRenderOptions
-             {
-                 LiElementClasses = new string[] { "page-item" },
-                 PageClasses = new String[] { "page-link" }
-             })
+        <div class="row">
+            <div class="col Oz">
+                @Html.PagedListPager(Model.Blogs, page => Url.Action("Index", new { page = page }),
+                     new PagedListRenderOptions
+                     {
+                         LiElementClasses = new string[] { "page-item" },
+                         PageClasses = new String[] { "page-link" }
+                     })
+            </div>
+        </div>
+    }
     </div>
-</div>
-}

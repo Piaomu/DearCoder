@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
 using Microsoft.AspNetCore.Identity;
+using DearCoder.ViewModels;
 
 namespace DearCoder.Controllers
 {
@@ -45,8 +46,13 @@ namespace DearCoder.Controllers
             //Load the view with all blog data
             var allBlogs = await _context.Blogs.OrderByDescending(b => b.Created)
                                                .ToPagedListAsync(pageNumber, pageSize);
+           
+            var viewModel = new IndexPostViewModel() {
+                LatestPost = await _context.Posts.OrderByDescending(p => p.Created).FirstOrDefaultAsync(p => p.Created != null),
+                Blogs = allBlogs
+            };
 
-            return View(allBlogs);
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
