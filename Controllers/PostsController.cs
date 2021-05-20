@@ -145,7 +145,7 @@ namespace DearCoder.Controllers
             var posts = _searchService.SearchContent(searchString);
 
             var pageNumber = page ?? 1;
-            var pageSize = 2;
+            var pageSize = 4;
             
 
 
