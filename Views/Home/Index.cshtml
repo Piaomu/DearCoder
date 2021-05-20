@@ -21,7 +21,7 @@
                 @foreach (var blog in Model.OrderByDescending(c => c.Created))
                 {
                 <div class="col-lg-6 mx-auto">
-                    <div class="card mt-2">
+                    <div class="card mt-2 h-100">
                         <div class="card-body text-center">
                             <div>
                                 <h2 class="post-title Oz">@blog.Name</h2>
@@ -48,7 +48,7 @@
                 <div class="card-body">
                     <form asp-action="SearchIndex" asp-controller="Posts">
                         <div class="input-group">
-                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                            <input class="form-control" type="text" name="searchString" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
                             <button class="btn-sm btn-primary btn-block Oz" id="button-search" type="submit">Search</button>
                         </div>
                     </form>

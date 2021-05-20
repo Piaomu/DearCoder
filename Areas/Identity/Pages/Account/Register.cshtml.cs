@@ -99,6 +99,9 @@ namespace DearCoder.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            ViewData["HeaderText"] = "Dear Coder";
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
@@ -143,6 +146,8 @@ namespace DearCoder.Areas.Identity.Pages.Account
                     }
                     else
                     {
+                        ViewData["HeaderText"] = "Dear Coder";
+                        ViewData["SubheaderText"] = "Tech letters from Kasey";
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }

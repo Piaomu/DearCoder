@@ -128,8 +128,6 @@ namespace DearCoder.Controllers
         }
 
         //Search Index
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SearchIndex(int? page, string searchString)
         {
             if (User.Identity.IsAuthenticated)
@@ -200,7 +198,7 @@ namespace DearCoder.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("BlogPostIndex", new { id = post.BlogId });
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
             return View(post);
         }
 
@@ -239,7 +237,7 @@ namespace DearCoder.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Created,Slug,Title,Abstract,Content,PublishState,ContentType")] Post post, IFormFile newImageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Created,Slug,Title,Abstract,Content,PublishState,ImageData,ContentType")] Post post, IFormFile newImageFile)
         {
             if (User.Identity.IsAuthenticated)
             {
