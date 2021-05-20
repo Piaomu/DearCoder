@@ -13,6 +13,7 @@ using DearCoder.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using X.PagedList;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace DearCoder.Controllers
@@ -24,14 +25,16 @@ namespace DearCoder.Controllers
         private readonly IConfiguration _configuration;
         private readonly BasicSlugService _slugService;
         private readonly SearchService _searchService;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public PostsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration, BasicSlugService slugService, SearchService searchService)
+        public PostsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration, BasicSlugService slugService, SearchService searchService, UserManager<BlogUser> userManager)
         {
             _context = context;
             _fileService = fileService;
             _configuration = configuration;
             _slugService = slugService;
             _searchService = searchService;
+            _userManager = userManager;
         }
 
         public async Task<ActionResult> BlogPostIndex(int id, int? page)
@@ -44,10 +47,16 @@ namespace DearCoder.Controllers
                                                             .OrderByDescending(b => b.Created)
                                                             .ToPagedListAsync(pageNumber, pageSize);
 
-
-            ViewData["HeaderText"] = "Dear Coder";
-            ViewData["SubheaderText"] = $"Enjoy these {blogPosts.FirstOrDefault()?.Blog.Name}.";
-
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+                ViewData["SubheaderText"] = $"Enjoy these {blogPosts.FirstOrDefault()?.Blog.Name}.";
+            
             return View(blogPosts);
         }
 
@@ -55,7 +64,14 @@ namespace DearCoder.Controllers
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
             ViewData["SubheaderText"] = "Tech letters from Kasey";
             var applicationDbContext = _context.Posts.Include(p => p.Blog);
             return View(await applicationDbContext.ToListAsync());
@@ -64,8 +80,14 @@ namespace DearCoder.Controllers
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(string slug)
         {
-            
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
 
             if (string.IsNullOrEmpty(slug))
             {
@@ -110,7 +132,14 @@ namespace DearCoder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SearchIndex(int? page, string searchString)
         {
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
             ViewData["SubheaderText"] = "Here are your search results.";
             ViewData["SearchString"] = searchString;
 
@@ -132,7 +161,15 @@ namespace DearCoder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,PublishState,ImageFile")] Post post)
         {
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+
             ViewData["SubheaderText"] = "Please create a Post.";
             if (ModelState.IsValid)
             {
@@ -171,8 +208,15 @@ namespace DearCoder.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
 
-            ViewData["HeaderText"] = "Dear Coder";
             ViewData["SubheaderText"] = "Please edit your post.";
 
 
@@ -197,7 +241,15 @@ namespace DearCoder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Created,Slug,Title,Abstract,Content,PublishState,ContentType")] Post post, IFormFile newImageFile)
         {
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+
             ViewData["SubheaderText"] = "Please edit your post.";
             if (id != post.Id)
             {
@@ -252,7 +304,15 @@ namespace DearCoder.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
 
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+
             ViewData["SubheaderText"] = "Are you sure you want to delete your post?";
 
             if (id == null)

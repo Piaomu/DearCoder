@@ -53,6 +53,8 @@ namespace DearCoder.Areas.Identity.Pages.Account
 
             if (user == null)
             {
+                ViewData["HeaderText"] = "Dear Coder";
+                ViewData["SubheaderText"] = "Please complete your second log in method.";
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
             }
 
@@ -74,6 +76,8 @@ namespace DearCoder.Areas.Identity.Pages.Account
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
+                ViewData["HeaderText"] = "Dear Coder";
+                ViewData["SubheaderText"] = "Please complete your second log in method.";
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
             }
 
@@ -88,11 +92,15 @@ namespace DearCoder.Areas.Identity.Pages.Account
             }
             else if (result.IsLockedOut)
             {
+                ViewData["HeaderText"] = "Dear Coder";
+                ViewData["SubheaderText"] = "Sorry, you've failed to log in too many times. Your'e locked out.";
                 _logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
                 return RedirectToPage("./Lockout");
             }
             else
             {
+                ViewData["HeaderText"] = "Dear Coder";
+                ViewData["SubheaderText"] = "Please complete your second log in method.";
                 _logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", user.Id);
                 ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
                 return Page();

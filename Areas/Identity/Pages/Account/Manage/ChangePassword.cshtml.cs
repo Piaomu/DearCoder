@@ -53,6 +53,16 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+            ViewData["SubheaderText"] = "Please enter a new password.";
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -78,6 +88,7 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
+                ViewData["HeaderText"] = "Dear Coder";
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
@@ -95,6 +106,15 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
             _logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";
 
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+            ViewData["SubheaderText"] = "Your password has been changed.";
             return RedirectToPage();
         }
     }

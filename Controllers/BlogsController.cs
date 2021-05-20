@@ -11,6 +11,7 @@ using DearCoder.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace DearCoder.Controllers
 {
@@ -19,19 +20,29 @@ namespace DearCoder.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<BlogUser> _userManager;
 
         //constructor injection
-        public BlogsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration)
+        public BlogsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration, UserManager<BlogUser> userManager)
         {
             _context = context;
             _fileService = fileService;
             _configuration = configuration;
+            _userManager = userManager;
         }
 
         // GET: Blogs
         public async Task<IActionResult> Index()
         {
-            ViewData["HeaderText"] = "Dear Coder";
+
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
             ViewData["SubheaderText"] = "Tech letters from Kasey";
 
             return View(await _context.Blogs.ToListAsync());
@@ -72,6 +83,16 @@ namespace DearCoder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description")] Blog blog, IFormFile Image)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+            ViewData["SubheaderText"] = "Please create a blog category.";
+
             if (ModelState.IsValid)
             {
                 blog.Image = (await _fileService.EncodeFileAsync(Image)) ??
@@ -95,7 +116,15 @@ namespace DearCoder.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
 
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+
             ViewData["SubheaderText"] = "Please edit your blog category.";
 
             if (id == null)
@@ -118,6 +147,16 @@ namespace DearCoder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Created,Updated,Image,ContentType")] Blog blog, IFormFile NewImage)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+            ViewData["SubheaderText"] = "Please edit your blog category.";
+
             if (id != blog.Id)
             {
                 return NotFound();
@@ -159,7 +198,15 @@ namespace DearCoder.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
 
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+
             ViewData["SubheaderText"] = "Are you sure you want to delete this blog category?";
 
             if (id == null)

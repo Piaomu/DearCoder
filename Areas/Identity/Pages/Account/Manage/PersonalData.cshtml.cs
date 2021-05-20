@@ -22,6 +22,15 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGet()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+            ViewData["SubheaderText"] = "Manage your personal data.";
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

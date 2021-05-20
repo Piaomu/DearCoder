@@ -79,11 +79,15 @@ namespace DearCoder.Areas.Identity.Pages.Account
             }
             if (result.IsLockedOut)
             {
+                ViewData["HeaderText"] = "Dear Coder";
+                ViewData["SubheaderText"] = "Sorry, you've failed to log in too many times. Your'e locked out.";
                 _logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
                 return RedirectToPage("./Lockout");
             }
             else
             {
+                ViewData["HeaderText"] = "Dear Coder";
+                ViewData["SubheaderText"] = "Sorry, your recovery code is invalid.";
                 _logger.LogWarning("Invalid recovery code entered for user with ID '{UserId}' ", user.Id);
                 ModelState.AddModelError(string.Empty, "Invalid recovery code entered.");
                 return Page();

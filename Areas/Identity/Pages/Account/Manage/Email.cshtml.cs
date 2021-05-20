@@ -65,6 +65,16 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+            ViewData["SubheaderText"] = "Tech letters from Kasey";
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -92,6 +102,16 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             if (Input.NewEmail != email)
             {
+                if (User.Identity.IsAuthenticated)
+                {
+                    ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+                }
+                else
+                {
+                    ViewData["HeaderText"] = "Dear Coder";
+                }
+                ViewData["SubheaderText"] = "Tech letters from Kasey";
+
                 var userId = await _userManager.GetUserIdAsync(user);
                 var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -115,6 +135,16 @@ namespace DearCoder.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+            ViewData["SubheaderText"] = "Manage your email.";
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

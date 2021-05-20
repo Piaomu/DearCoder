@@ -57,7 +57,14 @@ namespace DearCoder.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            ViewData["HeaderText"] = "Dear Coder";
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
             ViewData["SubheaderText"] = "Please enter your username and password to log in.";
 
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -83,6 +90,15 @@ namespace DearCoder.Areas.Identity.Pages.Account
         
             if (ModelState.IsValid)
             {
+                if (User.Identity.IsAuthenticated)
+                {
+                    ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+                }
+                else
+                {
+                    ViewData["HeaderText"] = "Dear Coder";
+                }
+                ViewData["SubheaderText"] = "Welcome!";
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
@@ -97,11 +113,15 @@ namespace DearCoder.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
+                    ViewData["HeaderText"] = "Dear Coder";
+                    ViewData["SubheaderText"] = "Sorry, you've attempted too many times. You're locked out.";
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
+                    ViewData["HeaderText"] = "Dear Coder";
+                    ViewData["SubheaderText"] = "Sorry, your login attempt was invalid.";
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
