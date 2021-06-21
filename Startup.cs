@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -55,6 +56,7 @@ namespace DearCoder
             //Swagger service reference
             services.AddSwaggerGen(c =>
             {
+                c.IncludeXmlComments($"{Directory.GetCurrentDirectory()}/wwwroot/DearCoder.xml", true);
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Blog API",

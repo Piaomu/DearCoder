@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DearCoder</name>
+    </assembly>
+    <members>
+        <member name="M:DearCoder.Controllers.APIControllers.PostsAPIController.GetTopXPosts(System.Int32)">
+            <summary>
+            This method will get the most recent X number of Blog Posts
+            </summary>
+            <param name="num">The number Blog Posts you want.</param>
+            <returns>The latest num number of Blog Posts ordered by created (descending).</returns>
+        </member>
+        <member name="P:DearCoder.Models.Post.Id">
+            <summary>
+            The Primary Key of the Post
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.BlogId">
+            <summary>
+            The Foreign Key to the Blog that is the parent of this Post
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.Title">
+            <summary>
+            The Title of the Post
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.Abstract">
+            <summary>
+            A brief subheading expounding on the title
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.Content">
+            <summary>
+            This is the body of the Post.
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.Created">
+            <summary>
+            The date on which the Post was created
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.Updated">
+            <summary>
+            If the Post has been updated, this date reflects the date it was updated
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.Slug">
+            <summary>
+            This is an internal property used to route to the Details of the Post
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.PublishState">
+            <summary>
+            The state of publication used to determine whether the Post is ready for publication and displays
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.ImageData">
+            <summary>
+            The byte array for the Image
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.ContentType">
+            <summary>
+            The file extension for the image
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.ImageFile">
+            <summary>
+            The user-input file
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.Blog">
+            <summary>
+            The navigational property pointing to the parent Blog
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Post.Comments">
+            <summary>
+            The children of the Post
+            </summary>
+        </member>
+    </members>
+</doc>

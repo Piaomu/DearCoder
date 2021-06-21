@@ -21,6 +21,11 @@ namespace DearCoder.Controllers.APIControllers
             _context = context;
         }
 
+        /// <summary>
+        /// This method will get the most recent X number of Blog Posts
+        /// </summary>
+        /// <param name="num">The number Blog Posts you want.</param>
+        /// <returns>The latest num number of Blog Posts ordered by created (descending).</returns>
         [HttpGet("/GetTopXPosts/{num}")]
         public async Task<ActionResult<IEnumerable<Post>>> GetTopXPosts(int num)
         {
