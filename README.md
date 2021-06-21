@@ -1,7 +1,10 @@
 # Dear Coder
 
 [Read the Blog](http://dear-coder.com/)
+![dear_coder_readme](https://user-images.githubusercontent.com/77030627/122840899-9e84f700-d2c0-11eb-8230-d8c7d5339eb4.jpg)
+---
 
+## Description
 Dear Coder is a blogging platform built for the purpose of sharing coding knowledge with fellow developers. 
 It is an independent project written in C# that exercises the core tenets of OOP and MVC architecture.
 
