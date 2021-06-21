@@ -16,7 +16,7 @@ Dear Coder features:
 * Abstracted services implemented by Interfaces
 * Application-wide search
 * Pagination
-* SEO-Friendly slug implementation
+* SEO-Friendly slug optimization
 
 ## Author
 
