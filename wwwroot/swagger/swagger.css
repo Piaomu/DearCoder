@@ -1,0 +1,20 @@
+﻿body {
+}
+
+.swagger-ui .topbar .download-url-wrapper .select-label select {
+    border-color: white;
+}
+
+.topbar-wrapper img {
+    content: url('/img/dear_coder_logo_60x60.png');
+}
+
+.topbar-wrapper .link:after {
+    content: "Dear Coder";
+    color: #fff;
+    visibility: visible;
+    display: block;
+    position: absolute;
+    padding-left: 75px;
+    font-family: Rockwell;
+}

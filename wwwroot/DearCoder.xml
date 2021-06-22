@@ -11,6 +11,151 @@
             <param name="num">The number Blog Posts you want.</param>
             <returns>The latest num number of Blog Posts ordered by created (descending).</returns>
         </member>
+        <member name="T:DearCoder.Models.Blog">
+            <summary>
+            A Blog category
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Blog.Id">
+            <summary>
+            Primary key of a Blog
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Blog.Name">
+            <summary>
+            The Blog category title
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Blog.Description">
+            <summary>
+            The description of the Blog category
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Blog.Created">
+            <summary>
+            The date the category was created
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Blog.Updated">
+            <summary>
+            The date the category was updated
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Blog.Image">
+            <summary>
+            The byte array that stores the image
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Blog.ContentType">
+            <summary>
+            The image extension
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Blog.Posts">
+            <summary>
+            The set of Posts associated with the Blog category
+            </summary>
+        </member>
+        <member name="T:DearCoder.Models.BlogUser">
+            <summary>
+            Represents a user which inherits its properties from IdentityUser
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.BlogUser.GivenName">
+            <summary>
+            The User's given name
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.BlogUser.SurName">
+            <summary>
+            The User's family name
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.BlogUser.DisplayName">
+            <summary>
+            The User's chosen display name
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.BlogUser.ImageData">
+            <summary>
+            The byte array that stores the User's Profile image data
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.BlogUser.ContentType">
+            <summary>
+            The extension for the User's profile image
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.BlogUser.FullName">
+            <summary>
+            The User's Given name and Surname combined
+            </summary>
+        </member>
+        <member name="T:DearCoder.Models.Comment">
+            <summary>
+            Represents a comment that is a child of a blog post
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.Id">
+            <summary>
+            The primary key of a Comment
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.PostId">
+            <summary>
+            The foreign key of the associated Post
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.AuthorId">
+            <summary>
+            The User Id of the Author
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.ModeratorId">
+            <summary>
+            The User Id of the Moderator
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.Body">
+            <summary>
+            Represents the content of the comment
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.Created">
+            <summary>
+            The date the comment was created
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.Moderated">
+            <summary>
+            The date if/when the comment is moderated
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.ModeratedBody">
+            <summary>
+            The edited body of the comment
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.ModerationType">
+            <summary>
+            The category for which the comment was edited
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.Post">
+            <summary>
+            The Post that the comment is affiliated with
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.Author">
+            <summary>
+            The navigational property for the Author
+            </summary>
+        </member>
+        <member name="P:DearCoder.Models.Comment.Moderator">
+            <summary>
+            The navigational property for the Moderator
+            </summary>
+        </member>
         <member name="P:DearCoder.Models.Post.Id">
             <summary>
             The Primary Key of the Post

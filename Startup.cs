@@ -92,6 +92,8 @@ namespace DearCoder
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "TestAPI v1");
+                c.InjectJavascript("/swagger/swagger.js");
+                c.InjectStylesheet("/swagger/swagger.css");
                 c.DocumentTitle = "Dear Coder Public API";
             });
 
