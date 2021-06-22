@@ -32,6 +32,15 @@ namespace DearCoder
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Cross-Origin Resource Sharing (CORS) policy
+            services.AddCors(options =>
+            {
+                options.AddPolicy("DefaultPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Connection.GetConnectionString(Configuration)));
@@ -87,6 +96,9 @@ namespace DearCoder
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // Use the CORS policy
+            app.UseCors("DefaultPolicy");
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
