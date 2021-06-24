@@ -180,7 +180,7 @@ namespace DearCoder.Controllers
                                     _configuration["DefaultPostImage"].Split('.')[1] :
                                     _fileService.ContentType(post.ImageFile);
 
-                //Slug stuff goes here...
+                //Add the post's slug
 
                 var slug = _slugService.UrlFriendly(post.Title);
                 if (!_slugService.IsUnique(slug))

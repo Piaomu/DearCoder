@@ -19,11 +19,10 @@ namespace DearCoder.Services
 
         public IOrderedQueryable<Post> SearchContent(string searchString)
         {
-            //Step 1: Get an IQueryable that contains all of the Posts in the event that
+            //Get an IQueryable that contains all of the Posts
             // in the event that the user does not supply a search string.
             var result = _context.Posts.Where(p => p.PublishState == PublishState.ProductionReady);
 
-            //c.Moderated == null &&
             if (!string.IsNullOrEmpty(searchString))
             {
 
