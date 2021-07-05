@@ -14,11 +14,11 @@ using Microsoft.AspNetCore.Authorization;
 using X.PagedList;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNetCore.Hosting;
 
 namespace DearCoder.Controllers
 {
-    public class PostsController : Controller
+    public class PostsController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
@@ -26,8 +26,15 @@ namespace DearCoder.Controllers
         private readonly BasicSlugService _slugService;
         private readonly SearchService _searchService;
         private readonly UserManager<BlogUser> _userManager;
+        private readonly IWebHostEnvironment _env;
 
-        public PostsController(ApplicationDbContext context, IFileService fileService, IConfiguration configuration, BasicSlugService slugService, SearchService searchService, UserManager<BlogUser> userManager)
+        public PostsController(ApplicationDbContext context,
+                               IFileService fileService, 
+                               IConfiguration configuration, 
+                               BasicSlugService slugService, 
+                               SearchService searchService, 
+                               UserManager<BlogUser> userManager,
+                               IWebHostEnvironment env)
         {
             _context = context;
             _fileService = fileService;
@@ -35,6 +42,7 @@ namespace DearCoder.Controllers
             _slugService = slugService;
             _searchService = searchService;
             _userManager = userManager;
+            _env = env;
         }
 
         public async Task<ActionResult> BlogPostIndex(int id, int? page)
@@ -96,9 +104,14 @@ namespace DearCoder.Controllers
 
             var post = await _context.Posts
                 .Include(p => p.Blog)
+                .Include(p => p.Views)
                 .Include(p => p.Comments)
                 .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
+
+
+            post.Views.Add(new Models.View { UserId = UserId });
+            await _context.SaveChangesAsync();
 
             ViewData["SubheaderText"] = $"Enjoy these {post.Blog.Name}.";
 

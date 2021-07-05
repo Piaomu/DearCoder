@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DearCoder.Models
 {
-    public class Post
+    public class Post : Viewable
     {
         /// <summary>
         /// The Primary Key of the Post
