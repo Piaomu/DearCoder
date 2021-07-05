@@ -110,7 +110,7 @@ namespace DearCoder.Controllers
                 .FirstOrDefaultAsync(m => m.Slug == slug);
 
 
-            post.Views.Add(new Models.View { UserId = UserId });
+            post.Views.Add(new Models.View { UserId = UserId, Created = DateTime.Now });
             await _context.SaveChangesAsync();
 
             ViewData["SubheaderText"] = $"Enjoy these {post.Blog.Name}.";

@@ -8,5 +8,6 @@ namespace DearCoder.Models
     public class View : BaseEntity
     {
         public string UserId { get; set; }
+        public DateTime Created { get; set; }
     }
 }
