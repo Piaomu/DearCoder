@@ -283,6 +283,15 @@ namespace DearCoder.Controllers
                         post.Slug = newSlug;
                     }
 
+                    //Change the "Created" Date to reflect the date of publication
+                    Post oldpost = await _context.Posts.AsNoTracking().FirstOrDefaultAsync(p => p.Id == post.Id);
+                    PublishState oldPublishState = oldpost.PublishState;
+                    
+                    if(post.PublishState != oldPublishState && post.PublishState == PublishState.ProductionReady)
+                    {
+                        post.Created = DateTime.Now;
+                    }
+
                     if (newImageFile is not null)
                     {
                         post.ImageData = await _fileService.EncodeFileAsync(newImageFile);
