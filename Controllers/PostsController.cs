@@ -15,6 +15,7 @@ using X.PagedList;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
+using DearCoder.Enums;
 
 namespace DearCoder.Controllers
 {
@@ -50,7 +51,7 @@ namespace DearCoder.Controllers
             var pageNumber = page ?? 1;
             var pageSize = 4;
 
-            var blogPosts = await _context.Posts.Where(p => p.BlogId == id)
+            var blogPosts = await _context.Posts.Where(p => p.BlogId == id && p.PublishState == PublishState.ProductionReady)
                                                             .Include(p => p.Blog)
                                                             .OrderByDescending(b => b.Created)
                                                             .ToPagedListAsync(pageNumber, pageSize);
