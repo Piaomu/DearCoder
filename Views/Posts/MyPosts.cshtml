@@ -32,6 +32,9 @@
                                             <th class="sorting sorting_desc" tabindex="0" aria-sort="descending" aria-label="Views : activate to sort column ascending">
                                                 Views
                                             </th>
+                                            <th>
+                                                Actions
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -61,6 +64,13 @@
                                             <td>
                                                 @post.Views.Count
                                             </td>
+                                            <td>
+                                                <a asp-controller="Posts" asp-action="Edit" asp-route-id="@post.Id">Edit</a> |
+                                                <a asp-controller="Posts" asp-action="Delete" asp-route-id="@post.Id">Delete</a>
+                                            </td>
+
+
+
                                         </tr>
                                             }
                                     </tbody>
