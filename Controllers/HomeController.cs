@@ -48,7 +48,7 @@ namespace DearCoder.Controllers
                                                .ToPagedListAsync(pageNumber, pageSize);
            
             var viewModel = new IndexPostViewModel() {
-                LatestPost = await _context.Posts.OrderByDescending(p => p.Created).FirstOrDefaultAsync(p => p.Created != null),
+                LatestPost = await _context.Posts.OrderByDescending(p => p.Created).FirstOrDefaultAsync(p => p.Created != null && p.PublishState == Enums.PublishState.ProductionReady),
                 Blogs = allBlogs
             };
 
