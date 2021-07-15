@@ -1,0 +1,50 @@
+﻿@model IEnumerable<DearCoder.Models.Post>
+
+@section Header {
+    <link href="~/plugins/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <h1>My Posts</h1>
+        <table id="myPosts" class="display">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Publish State</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(Post post in Model) {
+                <tr>
+                    <td>@post.Title</td>
+                </tr>
+                <tr>
+                    <td>@post.PublishState</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script src="~/plugins/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#myPosts').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                /*            "info": true,*/
+                "autoWidth": true,
+                "responsive": true,
+            });
+        });
+    </script>
+}

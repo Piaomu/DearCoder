@@ -86,6 +86,37 @@ namespace DearCoder.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> MyPosts()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewData["HeaderText"] = $"Dear {(await _userManager.GetUserAsync(User)).GivenName}";
+            }
+            else
+            {
+                ViewData["HeaderText"] = "Dear Coder";
+            }
+            ViewData["SubheaderText"] = "These are your Posts.";
+
+            var posts = await _context.Posts
+                                      .Include(p => p.Blog)
+                                      .Include(p => p.Views)
+                                      .Include(p => p.Comments)
+                                      .Include(p => p.Title)
+                                      .Include(p => p.Abstract)
+                                      .Include(p => p.Content)
+                                      .Include(p => p.Created)
+                                      .Include(p => p.Updated)
+                                      .ToListAsync();
+
+            return View();
+
+                                     
+        }
+
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(string slug)
         {
@@ -110,8 +141,12 @@ namespace DearCoder.Controllers
                 .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
 
+            //Only count a View if the user is not me.
+            if (!User.IsInRole("Administrator"))
+            {
+                post.Views.Add(new Models.View { UserId = UserId, Created = DateTime.Now });
+            }
 
-            post.Views.Add(new Models.View { UserId = UserId, Created = DateTime.Now });
             await _context.SaveChangesAsync();
 
             ViewData["SubheaderText"] = $"Enjoy these {post.Blog.Name}.";
