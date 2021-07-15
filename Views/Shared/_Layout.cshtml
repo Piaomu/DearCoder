@@ -38,10 +38,13 @@
                         @if (User.IsInRole("Administrator"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark Oz" asp-area="" asp-controller="Blogs" asp-action="Create">Create Blog</a>
+                                <a class="nav-link text-dark Oz" asp-controller="Blogs" asp-action="Create">Create Blog</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark Oz" asp-area="" asp-controller="Posts" asp-action="Create">Create Post</a>
+                                <a class="nav-link text-dark Oz" asp-controller="Posts" asp-action="Create">Create Post</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark Oz" asp-controller="Posts" asp-action="MyPosts">Manage Posts</a>
                             </li>
                         }
                         <li class="nav-item">
@@ -136,12 +139,10 @@
 
         <!-- Core theme JS-->
         <script src="~/js/scripts.js"></script>
+
+        <!--Sections-->
         @await RenderSectionAsync("Scripts", required: false)
-        <!-- You can create custom sections by including them on a view -->
-        <!-- The following section is for demo purposes and should not go live -->
-        <!-- By setting the required attribute to false we tell the code that it is okay if the View does not have this section-->
-       
-<!-- If you forget to set required: false you will throw errors on any View that doesn't have a section with that name-->
+        @await RenderSectionAsync("Header", required: false) 
         @await RenderSectionAsync("HelloKasey", required: false) 
 
     </body>

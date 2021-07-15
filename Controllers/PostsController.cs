@@ -101,18 +101,14 @@ namespace DearCoder.Controllers
             }
             ViewData["SubheaderText"] = "These are your Posts.";
 
-            var posts = await _context.Posts
+            List<Post> posts = await _context.Posts
                                       .Include(p => p.Blog)
                                       .Include(p => p.Views)
                                       .Include(p => p.Comments)
-                                      .Include(p => p.Title)
-                                      .Include(p => p.Abstract)
-                                      .Include(p => p.Content)
-                                      .Include(p => p.Created)
-                                      .Include(p => p.Updated)
+                                        .ThenInclude(c => c.Author)
                                       .ToListAsync();
 
-            return View();
+            return View(posts);
 
                                      
         }

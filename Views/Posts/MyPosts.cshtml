@@ -7,24 +7,70 @@
 <div class="content">
     <div class="container-fluid">
         <h1>My Posts</h1>
-        <table id="myPosts" class="display">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Publish State</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach(Post post in Model) {
-                <tr>
-                    <td>@post.Title</td>
-                </tr>
-                <tr>
-                    <td>@post.PublishState</td>
-                </tr>
-                }
-            </tbody>
-        </table>
+        <div class="card">
+            <div class="card-body">
+                <div class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col">
+
+                            <div class="col-sm-12">
+                                <table id="myPosts" class="table table-bordered dataTables_wrapper dtr-inline dataTable" role="grid">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="sorting sorting_asc" tabindex="0" aria-sort="ascending" aria-label="Title : activate to sort column ascending">
+                                                Title
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-sort="ascending" aria-label="Title : activate to sort column ascending">
+                                                Category
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-sort="descending" aria-label="Created : activate to sort column ascending">
+                                                Created
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-sort="ascending" aria-label="Production State : activate to sort column ascending">
+                                                Production State
+                                            </th>
+                                            <th class="sorting sorting_desc" tabindex="0" aria-sort="descending" aria-label="Views : activate to sort column ascending">
+                                                Views
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach(Post post in Model)
+                                            {
+                                        <tr class="odd">
+                                            <td>
+                                                <div>
+                                                    <a asp-controller="Posts" asp-action="Details" asp-route-slug="@post.Slug">
+                                                        @post.Title
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <a asp-controller="Posts" asp-action="BlogPostIndex" asp-route-id="@post.Blog.Id">
+                                                        @post.Blog.Name
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @post.Created.ToShortDateString()
+                                            </td>
+                                            <td>
+                                                @post.PublishState
+                                            </td>
+                                            <td>
+                                                @post.Views.Count
+                                            </td>
+                                        </tr>
+                                            }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -33,7 +79,8 @@
 @section Scripts{
 
     <script src="~/plugins/dataTables.bootstrap4.min.js"></script>
-
+    <script src="~/plugins/buttons.bootstrap4.min.js"></script>
+    <script src="~/plugins/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#myPosts').DataTable({
